@@ -166,7 +166,7 @@ export default function OutfitDetail() {
         
         <div
           className="flex items-center gap-3 px-4 pt-[20px] pb-3 cursor-pointer"
-          onClick={() => navigate(`/user/${outfit.userId}`)}
+          onClick={() => navigate(`/user/${myId}`)}
         >
           <img
             src={
