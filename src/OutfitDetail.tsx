@@ -357,7 +357,7 @@ export default function OutfitDetail() {
         <div className="shadow-[0_-4px_12px_rgba(0,0,0,0.20)] fixed bottom-0 left-0 right-0 w-full flex justify-between items-center max-w-[650px] mx-auto bg-white border-t shadow-md px-10 py-5 z-50">
           <Button
           
-            onClick={() => navigate(`/user/${outfit.userId}`)}
+            onClick={() => navigate(`/user/${myId}`)}
             className="shadow-md bg-black text-white px-6 py-5 rounded-full text-sm hover:bg-gray-800"
           >
             
@@ -409,7 +409,7 @@ export default function OutfitDetail() {
           
           {/* 마이페이지 버튼 */}
           <button 
-            onClick={() => navigate(`/user/${outfit.userId}`)}
+            onClick={() => navigate(`/user/${myId}`)}
             className="p-2 hover:bg-gray-50 rounded-full transition-colors"
           >
             <img
