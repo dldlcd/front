@@ -18,6 +18,21 @@ interface Outfit {
   userId: number;
   userNickname: string;
   userProfileImage: string;
+  bookmarked: boolean;
+}
+
+interface ProfileProps {
+  profile: {
+    id: number;
+    nickname: string;
+    gender: string;
+    ageGroup: string;
+    bodyType: string;
+    preferredStyles: string[];
+    profileImage: string;
+    bio: string;
+  };
+  
 }
 
 export default function OutfitDetail() {
@@ -27,6 +42,8 @@ export default function OutfitDetail() {
   const [comments, setComments] = useState<string[]>([]);
   const [newComment, setNewComment] = useState("");
   const [isCommentOpen, setIsCommentOpen] = useState(false);
+  const [myId, setMyId] = useState<string | null>(null);
+  
 
   // 컴포넌트가 마운트될 때 좋아요 상태를 가져오는 함수
   
@@ -47,7 +64,18 @@ export default function OutfitDetail() {
     }
   };
   
-
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) return;
+  
+    fetch("http://localhost:8080/api/auth/me", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    })
+      .then((res) => res.json())
+      .then((data) => setMyId(data.id.toString()));
+  }, []);
 
 
   const toggleLike = async (id: number) => {
@@ -77,6 +105,31 @@ export default function OutfitDetail() {
       console.error("좋아요 토글 에러:", error);
     }
   };
+
+  const toggleBookmark = async (id: number) => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("로그인이 필요합니다");
+      return;
+    }
+  
+    try {
+      const res = await fetch(`http://localhost:8080/api/auth/bookmark/${id}`, {
+        method: "PUT",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (!res.ok) throw new Error("북마크 토글 실패");
+  
+      await res.json();
+      await fetchOutfit(String(id), setOutfit); // ✅ 상태 갱신
+    } catch (error) {
+      console.error("북마크 토글 에러:", error);
+    }
+  };
+
   
 
   // 초기 데이터 로딩 및 좋아요 상태 갱신
@@ -116,7 +169,11 @@ export default function OutfitDetail() {
           onClick={() => navigate(`/user/${outfit.userId}`)}
         >
           <img
-            src={`http://localhost:8080${outfit.userProfileImage}`}
+            src={
+              outfit.userProfileImage && outfit.userProfileImage.startsWith("/")
+                ? outfit.userProfileImage
+                : "/default_image.png"
+            }
             alt="profile"
             className="w-10 h-10 rounded-full object-cover border"
           />
@@ -127,7 +184,7 @@ export default function OutfitDetail() {
         {/* 이미지 */}
         <div className="w-full aspect-square bg-black overflow-hidden">
           <img
-            src={`http://localhost:8080${outfit.imageUrl}`}
+            src={outfit.imageUrl}
             alt="Outfit"
             className="w-full h-full object-cover"
           />
@@ -161,16 +218,33 @@ export default function OutfitDetail() {
                 </svg>
               </button>
             </div>
-            <button className="p-1.5 hover:bg-gray-100 rounded-full transition-colors">
-              <svg
-                aria-label="저장"
-                className="w-6 h-6 hover:scale-110 transition-transform"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
-              </svg>
+            <button
+              onClick={() => toggleBookmark(outfit.id)}
+              className="p-1.5 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              {outfit.bookmarked ? (
+                <svg
+                  className="w-6 h-6 text-blue-500 fill-blue-500 hover:scale-110 transition-transform"
+                  viewBox="0 0 24 24"
+                  fill="currentColor"
+                >
+                  <path d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                </svg>
+              ) : (
+                <svg
+                  className="w-6 h-6 text-black hover:scale-110 transition-transform"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth={1.5}
+                    d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z"
+                  />
+                </svg>
+              )}
             </button>
           </div>
 
@@ -323,20 +397,29 @@ export default function OutfitDetail() {
           
           
           {/* 북마크 버튼 */}
-          <button className="p-2 hover:bg-gray-50 rounded-full transition-colors">
+          <button 
+            onClick={() => navigate(`/user/${myId}/bookmark`)}
+            className="p-2 hover:bg-gray-50 rounded-full transition-colors"
+          >
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
             </svg>
           </button>
+
           
           {/* 마이페이지 버튼 */}
           <button 
-            onClick={() => navigate('/mypage')}
+            onClick={() => navigate(`/user/${outfit.userId}`)}
             className="p-2 hover:bg-gray-50 rounded-full transition-colors"
-            
           >
-            <div className="w-6 h-6 rounded-full bg-gray-300"></div>
-            
+            <img
+              src={outfit.userProfileImage || "/default_image.png"}
+              onError={(e) => {
+                e.currentTarget.src = "/default_image.png";
+              }}
+              alt="My Profile"
+              className="w-6 h-6 rounded-full object-cover border"
+            />
           </button>
         </div>
       </div>

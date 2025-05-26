@@ -90,7 +90,7 @@ export default function CollectionSection({ className }: CollectionSectionProps)
                   <CardContent className="p-0">
                     <img
                       onClick={() => navigate(`/outfit/${outfit.id}`)}
-                      src={`http://localhost:8080${outfit.imageUrl}`}
+                      src={outfit.imageUrl}
                       alt="Outfit"
                       className="w-full h-60 object-cover"
                     />

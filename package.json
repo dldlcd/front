@@ -5,11 +5,14 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "chmod +x node_modules/.bin/vite && vite build",
+    "preview": "vite preview",
+    "vercel-build": "npm ci && npm run build"
   },
   "dependencies": {
     "@radix-ui/react-slot": "^1.1.2",
+    "classnames": "^2.5.1",
+    "framer-motion": "^12.12.1",
     "lucide-react": "^0.263.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"

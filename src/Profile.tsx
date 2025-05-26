@@ -1,5 +1,6 @@
 import { useEffect, useState, React } from "react";
 import { useNavigate } from "react-router-dom";
+import { Settings } from "lucide-react";
 
 interface ProfileProps {
   profile: {
@@ -73,6 +74,8 @@ const MyProfile: React.FC<ProfileProps> = ({ profile }) => {
               >
                 ←
               </button>
+
+              
             
             </div>
             
@@ -85,11 +88,13 @@ const MyProfile: React.FC<ProfileProps> = ({ profile }) => {
           <div className="pl-0 pr-0 pt-24 pb-2">
             <div className="flex items-center gap-6">
               <div className="relative">
-                <img
-                  src={`http://localhost:8080${profile.profileImage}`}
+              <img
+                  src={profile.profileImage || "/default_image.png"}
                   alt="profile"
                   className="w-24 h-24 rounded-full object-cover border-2 border-white shadow-md"
                 />
+
+                
                 {String(profile.id) === myId && (
                 <button 
                   className="absolute -bottom-1 right-1 bg-black text-white rounded-full w-7 h-7 flex items-center justify-center shadow-md hover:bg-blue-600 transition-colors text-sm"
@@ -105,14 +110,30 @@ const MyProfile: React.FC<ProfileProps> = ({ profile }) => {
                   <span className="text-base">+</span>
                 </button>
                 )}
+                
               </div>
-              <div>
-                <h2 className="text-xl font-bold ">{profile.nickname}</h2>
-                <p className="text-gray-600">
-                  {profile.ageGroup} • {profile.bodyType}
-                </p>
+              <div className="flex items-start justify-between">
+                <div>
+                  <h2 className="text-xl font-bold ">{profile.nickname}</h2>
+                  <p className="text-gray-600">
+                    {profile.ageGroup} • {profile.bodyType}
+                  </p>
+                </div>
+                
+                </div>
+                
               </div>
             </div>
+          <div className="flex justify-end ml-80">
+                <button
+                  onClick={() => {
+                    const path = `/profile-setup?userId=${profile.id}`;
+                    navigate(path);
+                  }}
+                  className="ml-5 w-8 h-8 flex items-center justify-center hover:bg-gray-100 rounded-full transition-colors"
+                >
+                  <Settings className="w-5 h-5 text-gray-500" />
+                </button>
           </div>
         </div>
 

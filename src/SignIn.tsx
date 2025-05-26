@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { Lock, Camera, RotateCcw, User, Menu } from "lucide-react";
+import { Lock, Camera, RotateCcw, User, Menu, Search, ShoppingBag, LogIn, LogOut, Home as HomeIcon, Heart, MessageCircle, Bookmark, PlusSquare, Compass } from "lucide-react";
 
 export default function SignIn() {
   const [id, setId] = useState("");
@@ -12,6 +12,76 @@ export default function SignIn() {
   const [success, setSuccess] = useState("");
   const [mainImage, setMainImage] = useState("/thumb-1.png");
   const navigate = useNavigate();
+
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+  const [myId, setMyId] = useState<number | null>(null);
+
+useEffect(() => {
+  const token = localStorage.getItem("token");
+  if (!token) return;
+
+  const fetchUserId = async () => {
+    try {
+      const res = await fetch("http://localhost:8080/api/auth/me", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await res.json();
+      setMyId(data.id); // 로그인한 사용자 ID 저장
+    } catch (err) {
+      console.error("사용자 ID 조회 실패:", err);
+    }
+  };
+
+  fetchUserId();
+}, []);
+
+  const goCart = () => navigate('/cart');
+  const goUserPage = () => {
+    if (myId) {
+      navigate(`/user/${myId}`);
+    } else {
+      alert("로그인이 필요합니다.");
+    }
+  };
+  const goSignIn = () => navigate('/signin');
+  const handleReadMore = () => navigate('/collection');
+  const token = localStorage.getItem("token");
+
+
+  useEffect(() => {
+    // ✅ 1. URL에서 token 쿼리 파라미터 추출
+    const params = new URLSearchParams(location.search);
+    const tokenFromURL = params.get("token");
+
+    // ✅ 2. token 있으면 저장 + 로그인 상태 true
+    if (tokenFromURL) {
+      localStorage.setItem("token", tokenFromURL);
+      setIsLoggedIn(true);
+      // ✅ 3. 주소 깔끔하게 정리
+      window.history.replaceState({}, document.title, "/");
+    } else {
+      const tokenFromStorage = localStorage.getItem("token");
+      setIsLoggedIn(!!tokenFromStorage);
+    }
+  }, [location]);
+
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    setIsLoggedIn(false);
+    alert("로그아웃 되었습니다!");
+    navigate("/signin");
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // 부드러운 스크롤 효과
+    });
+  };
 
   
 
@@ -38,37 +108,75 @@ export default function SignIn() {
     }
   };
 
+  const handleHomeClick = () => {
+    navigate("/");
+    // 페이지가 전환된 후 스크롤을 맨 위로 이동
+    setTimeout(scrollToTop, 0);
+  };
+
   return (
-    <div className="min-h-screen bg-white flex flex-col">
+    <div className="min-h-screen bg-gray-50">
       {/* 상단 네비게이션 바 */}
-      <header className="w-full px-6 py-3 flex justify-between items-center border-b border-gray-200 bg-white shadow-sm h-[72px]">
-        {/* 왼쪽 메뉴 */}
-        <div className="flex items-center gap-6">
-          <Menu className="w-6 h-6 md:w-8 md:h-8" />
-          <nav className="flex gap-6 md:gap-8 text-sm md:text-base font-semibold tracking-wide">
-            <button onClick={() => navigate("/")} className="hover:underline">Home</button>
-            <button onClick={() => navigate("/collections")} className="hover:underline">Collections</button>
-            <a href="#" className="hover:underline">Deals</a>
-          </nav>
-        </div>
+      <header className="bg-white border-b border-gray-200 fixed top-0 w-full z-10">
+        <div className="max-w-7xl mx-auto px-3 flex justify-between items-center h-14">
+          {/* 로고 */}
+          
 
-        {/* 로고 (크기 조절 가능, 상단바 고정) */}
-        <div className="flex-shrink-0" style={{ height: "500%" }}>
-          <img
-            src="/icon-1.png"
-            alt="Logo"
-            className="h-full object-contain"
-            style={{ maxHeight: "400px" }}
-          />
-        </div>
+          {/* 검색 바 */}
+          <div className="hidden md:flex items-center bg-gray-50 rounded-md px-3 py-1.5 w-64">
+            <Search className="h-4 w-4 text-gray-400 mr-2" />
+            <input
+              type="text"
+              placeholder="검색"
+              className="bg-transparent border-none focus:outline-none text-sm w-full"
+            />
+          </div>
 
-        {/* 오른쪽 아이콘 */}
-        <div className="flex items-center gap-4 md:gap-6">
-          {[RotateCcw, Camera, User].map((Icon, i) => (
-            <div key={i} className="w-14 h-14 bg-black text-white rounded-full flex items-center justify-center">
-              <Icon className="w-7 h-7" />
-            </div>
-          ))}
+          <div className="text-xl font-semibold"><img src="/logo3.png" alt="logo" className="h-8 w-25 ml-20 " /></div>
+
+          {/* 네비게이션 아이콘들 */}
+          <div className="flex items-center space-x-6">
+            <Button variant="ghost" className="flex-col h-auto p-2 min-w-[60px]" onClick={handleHomeClick}>
+              <HomeIcon className="h-5 w-5" />
+              <span className="text-xs mt-1">홈</span>
+            </Button>
+            
+            {isLoggedIn && (
+              <Button variant="ghost" className="flex-col h-auto p-2 min-w-[60px]" onClick={goUserPage}>
+                <User className="h-5 w-5" />
+                <span className="text-xs mt-1">마이페이지</span>
+              </Button>
+            )}
+            
+            <Button variant="ghost" className="flex-col h-auto p-2 min-w-[60px]" onClick={() => navigate("/collections")}>
+              <Compass className="h-5 w-5" />
+              <span className="text-xs mt-1">탐색</span>
+            </Button>
+
+            {!isLoggedIn && (
+              <>
+                <Button variant="ghost" className="flex-col h-auto p-2 min-w-[60px]" onClick={() => navigate("/signup")}>
+                  <Compass className="h-5 w-5" />
+                  <span className="text-xs mt-1">회원가입</span>
+                </Button>
+
+                
+              </>
+            )}
+
+            
+            {isLoggedIn ? (
+              <Button variant="ghost" className="flex-col h-auto p-2 min-w-[60px]" onClick={handleLogout}>
+                <LogOut className="h-5 w-5" />
+                <span className="text-xs mt-1">로그아웃</span>
+              </Button>
+            ) : (
+              <Button variant="ghost" className="flex-col h-auto p-2 min-w-[60px]" onClick={goSignIn}>
+                <LogIn className="h-5 w-5" />
+                <span className="text-xs mt-1">로그인</span>
+              </Button>
+            )}
+          </div>
         </div>
       </header>
 

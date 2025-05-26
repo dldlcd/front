@@ -183,7 +183,7 @@ export default function DesignApproachSection(): React.JSX.Element {
                 
                 <img
                   onClick={() => navigate(`/outfit/${outfit.id}`)}
-                  src={`http://localhost:8080${outfit.imageUrl}`}
+                  src={outfit.imageUrl}
                   alt={outfit.description}
                   className="w-full h-[313px] object-cover"
                 />

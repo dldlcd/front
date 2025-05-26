@@ -1,4 +1,4 @@
-import { useState, React } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 
@@ -8,6 +8,7 @@ export default function AddOutfit() {
   const [description, setDescription] = useState("");
   const [color, setColor] = useState("");
   const [season, setSeason] = useState("");
+  const [gender, setGender] = useState("");
   const [situation, setSituation] = useState("");
   const [style, setStyle] = useState("");
 
@@ -86,6 +87,21 @@ formData.append("upload_time", now);
           />
         </div>
 
+        <div>
+          <label className="block font-medium mb-1">성별</label>
+          <select
+            value={gender}
+            onChange={(e) => setGender(e.target.value)}
+            className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-black py-2 px-1 bg-transparent"
+            required
+          >
+            <option value="">선택</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
+            
+          </select>
+        </div>
+
     <div>
           <label className="block font-medium mb-1">계절</label>
           <select
@@ -113,10 +129,10 @@ formData.append("upload_time", now);
             <option value="">선택</option>
             <option value="workout">운동</option>
             <option value="campus">캠퍼스</option>
-            <option value="office">출근</option>
+            <option value="work">출근</option>
             <option value="travel">여행</option>
             <option value="date">데이트</option>
-            <option value="casual">가벼운외출</option>
+            <option value="outing">가벼운외출</option>
             <option value="daily">데일리</option>
 
            
@@ -132,14 +148,19 @@ formData.append("upload_time", now);
         className="w-full border-b-2 border-gray-300 focus:outline-none focus:border-black py-2 px-1 bg-transparent"
       >
         <option value="">선택</option>
-        <option value="minimal">미니멀</option>
-        <option value="street">스트릿</option>
-        <option value="retro">레트로</option>
-        <option value="amekaji">아메카지</option>
-        <option value="unique">유니크</option>
         <option value="casual">캐주얼</option>
+        <option value="sporty">스포티</option>
+        <option value="formal">포멀</option>
+        <option value="minimal">미니멀</option>
+        <option value="office">오피스</option>
+        <option value="street">스트릿</option>
+        <option value="date">데이트</option>
+        <option value="amercaji">아메카지</option>
+        <option value="unique">유니크</option>
         <option value="vintage">빈티지</option>
         <option value="lovely">러블리</option>
+        <option value="cityboy">시티보이</option>
+        <option value="retro">레트로</option>
       </select>
     </div>
 

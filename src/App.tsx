@@ -13,6 +13,9 @@ import AddOutfit from "./addoutfit";
 import MyProfile from "./Profile";
 import OutfitDetail from "./OutfitDetail";
 import UserPage from "./UserPage";
+import ProfileSetup from "./ProfileSetup";
+import ProfileSetupF from "./ProfileSetupF";
+import Bookmark from "./Bookmark";
 
 const App = () => {
   return (
@@ -28,6 +31,9 @@ const App = () => {
       <Route path="/profile" element={<MyProfile />} />
       <Route path="/outfit/:id" element={<OutfitDetail />} />
       <Route path="/user/:userId" element={<UserPage />} />
+      <Route path="/profile-setup" element={<ProfileSetup />} />
+      <Route path="/profile-setup-f" element={<ProfileSetupF />} />
+      <Route path="/user/:userId/bookmark" element={<Bookmark />} />
     </Routes>
   );
 };
