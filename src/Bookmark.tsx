@@ -39,7 +39,7 @@ export default function UserPage() {
     const token = localStorage.getItem("token");
     if (!token) return;
   
-    fetch("http://localhost:8080/api/auth/me", {
+    fetch("http://54.180.117.72:8080/api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -49,11 +49,11 @@ export default function UserPage() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://localhost:8080/api/auth/profile/${userId}`)
+    fetch(`http://54.180.117.72:8080/api/auth/profile/${userId}`)
       .then((res) => res.json())
       .then(setProfile);
 
-    fetch(`http://localhost:8080/api/auth/User/${userId}/bookmark`)
+    fetch(`http://54.180.117.72:8080/api/auth/User/${userId}/bookmark`)
       .then((res) => res.json())
       .then(setOutfits);
   }, [userId]);

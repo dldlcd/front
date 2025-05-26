@@ -1,11 +1,11 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useEffect, useState, React } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {  Heart, HeartOff } from "lucide-react";
 import MyProfile from "./Profile";
 
 interface Outfit {
-  
+  id: number;
   title: string;
   description: string;
   imageUrl: string;
@@ -68,7 +68,7 @@ export default function OutfitDetail() {
     const token = localStorage.getItem("token");
     if (!token) return;
   
-    fetch("http://localhost:8080/api/auth/me", {
+    fetch("http://54.180.117.72:8080/api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -86,7 +86,7 @@ export default function OutfitDetail() {
     }
   
     try {
-      const res = await fetch(`http://localhost:8080/api/auth/like/${id}`, {
+      const res = await fetch(`http://54.180.117.72:8080/api/auth/like/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -114,7 +114,7 @@ export default function OutfitDetail() {
     }
   
     try {
-      const res = await fetch(`http://localhost:8080/api/auth/bookmark/${id}`, {
+      const res = await fetch(`http://54.180.117.72:8080/api/auth/bookmark/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

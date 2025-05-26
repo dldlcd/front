@@ -30,7 +30,7 @@ formData.append("upload_time", now);
 
 
     // 📡 백엔드에 전송
-    fetch("http://localhost:8080/api/auth/mypage/uploads", {
+    fetch("http://54.180.117.72:8080/api/auth/mypage/uploads", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token") || ""}`,

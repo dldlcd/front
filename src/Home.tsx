@@ -29,7 +29,7 @@ export default function Home() {
 
     const fetchUserId = async () => {
       try {
-        const res = await fetch("http://localhost:8080/api/auth/me", {
+        const res = await fetch("http://54.180.117.72:8080/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -72,7 +72,7 @@ export default function Home() {
     if (filters.tpo) params.set("tpo", filters.tpo);
   
     // ✅ 검색 로그 저장
-    await fetch("http://localhost:8080/api/searchlog", {
+    await fetch("http://54.180.117.72:8080/api/searchlog", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

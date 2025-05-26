@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight, Heart, HeartOff } from "lucide-react";
-import { useEffect, useState, React } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 interface Outfit {
@@ -34,7 +34,7 @@ export default function DesignApproachSection(): React.JSX.Element {
     const token = localStorage.getItem("token");
   
     try {
-      const res = await fetch("http://localhost:8080/api/outfits/this-week", {
+      const res = await fetch("54.180.117.72:8080/api/outfits/this-week", {
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }), // ✅ 토큰 있으면 Authorization 추가
         },
@@ -59,7 +59,7 @@ export default function DesignApproachSection(): React.JSX.Element {
     }
 
     try {
-      const res = await fetch(`http://localhost:8080/api/auth/like/${id}`, {
+      const res = await fetch(`http://54.180.117.72:8080/api/auth/like/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

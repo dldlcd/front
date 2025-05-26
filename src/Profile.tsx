@@ -1,4 +1,4 @@
-import { useEffect, useState, React } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Settings } from "lucide-react";
 
@@ -13,10 +13,11 @@ interface ProfileProps {
     profileImage: string;
     bio: string;
   };
+  isMe?: boolean;
   
 }
 
-const MyProfile: React.FC<ProfileProps> = ({ profile }) => {
+const MyProfile: React.FC<ProfileProps> = ({ profile, isMe }) => {
   const navigate = useNavigate();
 
   const [myId, setMyId] = useState<string | null>(null);
@@ -25,7 +26,7 @@ const MyProfile: React.FC<ProfileProps> = ({ profile }) => {
     const token = localStorage.getItem("token");
     if (!token) return;
   
-    fetch("http://localhost:8080/api/auth/me", {
+    fetch("http://54.180.117.72:8080/api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -43,7 +44,7 @@ const MyProfile: React.FC<ProfileProps> = ({ profile }) => {
     formData.append("image", file);
 
     try {
-      const res = await fetch("http://localhost:8080/api/auth/profile/image", {
+      const res = await fetch("http://54.180.117.72:8080/api/auth/profile/image", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token") || ""}`,
