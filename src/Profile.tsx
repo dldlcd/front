@@ -125,6 +125,7 @@ const MyProfile: React.FC<ProfileProps> = ({ profile, isMe }) => {
                 
               </div>
             </div>
+          {String(profile.id) === myId && (
           <div className="flex justify-end ml-80">
                 <button
                   onClick={() => {
@@ -136,7 +137,10 @@ const MyProfile: React.FC<ProfileProps> = ({ profile, isMe }) => {
                   <Settings className="w-5 h-5 text-gray-500" />
                 </button>
           </div>
+          )}
         </div>
+                
+                
 
         {/* 하단 정보 */}
         <div className="w-full text-sm text-gray-700 space-y-0 mb-1 pl-5">
