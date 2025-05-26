@@ -41,7 +41,7 @@ export default function UserPage() {
     const token = localStorage.getItem("token");
     if (!token) return;
   
-    fetch("http://54.180.117.72:8080/api/auth/me", {
+    fetch("https://54.180.117.72:8080/api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -51,11 +51,11 @@ export default function UserPage() {
   }, []);
 
   useEffect(() => {
-    fetch(`http://54.180.117.72:8080/api/auth/profile/${userId}`)
+    fetch(`https://54.180.117.72:8080/api/auth/profile/${userId}`)
       .then((res) => res.json())
       .then(setProfile);
 
-    fetch(`http://54.180.117.72:8080/api/auth/User/${userId}`)
+    fetch(`https://54.180.117.72:8080/api/auth/User/${userId}`)
       .then((res) => res.json())
       .then(setOutfits);
   }, [userId]);
@@ -112,7 +112,7 @@ export default function UserPage() {
           {outfits.length === 0 ? (
             <div className="w-full flex flex-col items-center justify-center pt-45 pb-40 py-20 text-center text-gray-400">
               <svg
-                xmlns="http://www.w3.org/2000/svg"
+                xmlns="https://www.w3.org/2000/svg"
                 className="h-16 w-16 mb-4 text-gray-300"
                 fill="none"
                 viewBox="0 0 24 24"
