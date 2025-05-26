@@ -130,6 +130,18 @@ export default function OutfitDetail() {
     }
   };
 
+  const [authorProfileImage, setAuthorProfileImage] = useState<string>("");
+
+useEffect(() => {
+  if (!outfit?.userId) return;
+
+  fetch(`https://54.180.117.72/api/users/${outfit.userId}`)
+    .then(res => res.json())
+    .then(data => {
+      setAuthorProfileImage(data.profileImage || "/default_image.png");
+    });
+}, [outfit]);
+
   
 
   // 초기 데이터 로딩 및 좋아요 상태 갱신
@@ -169,13 +181,13 @@ export default function OutfitDetail() {
           onClick={() => navigate(`/user/${outfit.userId}`)}
         >
           <img
-              src={outfit.userProfileImage || "/default_image.png"}
-              onError={(e) => {
-                e.currentTarget.src = "/default_image.png";
-              }}
-              alt="My Profile"
-              className="w-6 h-6 rounded-full object-cover border"
-            />
+  src={authorProfileImage}
+  onError={(e) => {
+    e.currentTarget.src = "/default_image.png";
+  }}
+  alt="작성자 프로필"
+  className="w-6 h-6 rounded-full object-cover border"
+/>
           <span className="text-sm font-semibold">{outfit.userNickname}</span>
       </div>
       
