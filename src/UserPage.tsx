@@ -41,7 +41,7 @@ export default function UserPage() {
     const token = localStorage.getItem("token");
     if (!token) return;
   
-    fetch("https://54.180.117.72:8080/api/auth/me", {
+    fetch("https://54.180.117.72/api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -51,11 +51,11 @@ export default function UserPage() {
   }, []);
 
   useEffect(() => {
-    fetch(`https://54.180.117.72:8080/api/auth/profile/${userId}`)
+    fetch(`https://54.180.117.72/api/auth/profile/${userId}`)
       .then((res) => res.json())
       .then(setProfile);
 
-    fetch(`https://54.180.117.72:8080/api/auth/User/${userId}`)
+    fetch(`https://54.180.117.72/api/auth/User/${userId}`)
       .then((res) => res.json())
       .then(setOutfits);
   }, [userId]);
