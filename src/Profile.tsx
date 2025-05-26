@@ -26,7 +26,7 @@ const MyProfile: React.FC<ProfileProps> = ({ profile, isMe }) => {
     const token = localStorage.getItem("token");
     if (!token) return;
   
-    fetch("https://54.180.117.72/api/auth/me", {
+    fetch("http://54.180.117.72/api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -44,7 +44,7 @@ const MyProfile: React.FC<ProfileProps> = ({ profile, isMe }) => {
     formData.append("image", file);
 
     try {
-      const res = await fetch("https://54.180.117.72/api/auth/profile/image", {
+      const res = await fetch("http://54.180.117.72/api/auth/profile/image", {
         method: "POST",
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token") || ""}`,

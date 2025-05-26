@@ -88,7 +88,7 @@ export default function ProfileSetupF() {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`https://54.180.117.72/api/auth/profileSetF/${userId}`, {
+      const res = await fetch(`http://54.180.117.72/api/auth/profileSetF/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
@@ -230,7 +230,7 @@ export default function ProfileSetupF() {
                 {type === "slim" ? "슬림" : 
                  type === "average" ? "보통" : 
                  type === "muscular" ? "근육형" : 
-                 type === "athletic" ? "애슬레틱" : type}
+                 type === "round" ? "둥근형" : type}
               </Button>
             ))}
           </div>

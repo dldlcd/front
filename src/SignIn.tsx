@@ -23,7 +23,7 @@ useEffect(() => {
 
   const fetchUserId = async () => {
     try {
-      const res = await fetch("https://54.180.117.72/api/auth/me", {
+      const res = await fetch("http://54.180.117.72/api/auth/me", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
@@ -90,7 +90,7 @@ useEffect(() => {
     setSuccess("");
 
     try {
-      const response = await fetch("https://54.180.117.72/api/auth/login", {
+      const response = await fetch("http://54.180.117.72/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: id, password }),
