@@ -193,7 +193,7 @@ export default function Collections() {
   }, [location]);
 
   useEffect(() => {
-    fetch('http://localhost:8080/api/outfits')
+    fetch('http://54.180.117.72:8080/api/outfits')
       .then((res) => res.json())
       .then(setOutfits)
       .catch((err) => console.error('데이터 로딩 실패:', err));
