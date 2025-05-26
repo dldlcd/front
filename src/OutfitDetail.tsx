@@ -176,7 +176,7 @@ export default function OutfitDetail() {
                 e.currentTarget.src = "/default_image.png";
               }}
               alt="My Profile"
-              className="w-6 h-6 rounded-full object-cover border"
+              className="w-10 h-10 rounded-full object-cover border"
             />
           <span className="text-sm font-semibold">{outfit.userNickname}</span>
       </div>
