@@ -6,7 +6,6 @@ import Home from "./Home";
 import Collections from "./Collections";
 import CollectionDetail from "./CollectionDetail";
 import Cart from "./Cart";
-import MyPage from "./MyPage";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import AddOutfit from "./addoutfit";
@@ -24,11 +23,10 @@ const App = () => {
       <Route path="/collections" element={<Collections />} />
       <Route path="/collection/:id" element={<CollectionDetail />} />
       <Route path="/cart" element={<Cart />} />
-      <Route path="/mypage" element={<MyPage />} />
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/add" element={<AddOutfit />} />
-      <Route path="/profile" element={<MyProfile />} />
+      
       <Route path="/outfit/:id" element={<OutfitDetail />} />
       <Route path="/user/:userId" element={<UserPage />} />
       <Route path="/profile-setup" element={<ProfileSetup />} />
