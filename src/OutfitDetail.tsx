@@ -169,11 +169,7 @@ export default function OutfitDetail() {
           onClick={() => navigate(`/user/${outfit.userId}`)}
         >
           <img
-            src={
-              outfit.userProfileImage && outfit.userProfileImage.startsWith("/")
-                ? outfit.userProfileImage
-                : "/default_image.png"
-            }
+            src={outfit.userProfileImage || "/default_image.png"}
             alt="profile"
             className="w-10 h-10 rounded-full object-cover border"
           />
