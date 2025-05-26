@@ -5,7 +5,7 @@ import {  Heart, HeartOff } from "lucide-react";
 import MyProfile from "./Profile";
 
 interface Outfit {
-  id: number;
+  id: number
   title: string;
   description: string;
   imageUrl: string;
@@ -50,8 +50,8 @@ export default function OutfitDetail() {
   const fetchOutfit = async (id: string, setOutfit: React.Dispatch<React.SetStateAction<Outfit | null>>) => {
     const token = localStorage.getItem("token");
     const url = token
-      ? `http://localhost:8080/api/outfits/auth/${id}`
-      : `http://localhost:8080/api/outfits/${id}`;
+      ? `http://54.180.117.72:8080/api/outfits/auth/${id}`
+      : `http://54.180.117.72:8080/api/outfits/${id}`;
   
     try {
       const res = await fetch(url, {
