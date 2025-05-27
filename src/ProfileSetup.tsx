@@ -19,7 +19,7 @@ export default function ProfileSetup() {
   const handleSubmit = async () => {
     try {
       const token = localStorage.getItem("token");
-      const res = await fetch(`http://54.180.117.72/api/auth/profileSet/${userId}`, {
+      const res = await fetch(`https://54.180.117.72/api/auth/profileSet/${userId}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",

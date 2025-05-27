@@ -27,7 +27,7 @@ export default function SignUp() {
   
     const fetchUserId = async () => {
       try {
-        const res = await fetch("http://54.180.117.72/api/auth/me", {
+        const res = await fetch("https://54.180.117.72/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -90,7 +90,7 @@ export default function SignUp() {
 
   const handleSubmit = async () => {
     try {
-      const response = await fetch("http://54.180.117.72/api/auth/register", {
+      const response = await fetch("https://54.180.117.72/api/auth/register", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
