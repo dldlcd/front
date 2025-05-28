@@ -34,7 +34,7 @@ export default function DesignApproachSection(): React.JSX.Element {
     const token = localStorage.getItem("token");
   
     try {
-      const res = await fetch("https://looksy.p-e.kr.72/api/outfits/this-week", {
+      const res = await fetch("https://looksy.p-e.kr/api/outfits/this-week", {
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }), // ✅ 토큰 있으면 Authorization 추가
         },
