@@ -37,7 +37,7 @@ export default function CollectionSection({ className }: CollectionSectionProps)
       return; // 로그인 안 되어 있으면 fetch 시도 안 함
     }
 
-    fetch("https://54.180.117.72/api/auth/mypage", {
+    fetch("https://looksy.p-e.kr.72/api/auth/mypage", {
       headers: {
         Authorization: `Bearer ${token}`,
       },

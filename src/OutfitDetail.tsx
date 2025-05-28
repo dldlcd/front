@@ -50,8 +50,8 @@ export default function OutfitDetail() {
   const fetchOutfit = async (id: string, setOutfit: React.Dispatch<React.SetStateAction<Outfit | null>>) => {
     const token = localStorage.getItem("token");
     const url = token
-      ? `https://54.180.117.72/api/outfits/auth/${id}`
-      : `https://54.180.117.72/api/outfits/${id}`;
+      ? `https://looksy.p-e.kr/api/outfits/auth/${id}`
+      : `https://looksy.p-e.kr/api/outfits/${id}`;
   
     try {
       const res = await fetch(url, {
@@ -68,7 +68,7 @@ export default function OutfitDetail() {
     const token = localStorage.getItem("token");
     if (!token) return;
   
-    fetch("https://54.180.117.72/api/auth/me", {
+    fetch("https://looksy.p-e.kr/api/auth/me", {
       headers: {
         Authorization: `Bearer ${token}`,
       },
@@ -86,7 +86,7 @@ export default function OutfitDetail() {
     }
   
     try {
-      const res = await fetch(`https://54.180.117.72/api/auth/like/${id}`, {
+      const res = await fetch(`https://looksy.p-e.kr/api/auth/like/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,
@@ -114,7 +114,7 @@ export default function OutfitDetail() {
     }
   
     try {
-      const res = await fetch(`https://54.180.117.72/api/auth/bookmark/${id}`, {
+      const res = await fetch(`https://looksy.p-e.kr/api/auth/bookmark/${id}`, {
         method: "PUT",
         headers: {
           Authorization: `Bearer ${token}`,

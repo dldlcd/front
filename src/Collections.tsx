@@ -78,7 +78,7 @@ export default function Collections() {
     if (filters.tpo) params.set("tpo", filters.tpo);
   
     // ✅ 검색 로그 저장
-    await fetch("https://54.180.117.72/api/searchlog", {
+    await fetch("https://looksy.p-e.kr.72/api/searchlog", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -101,7 +101,7 @@ export default function Collections() {
   
     const fetchUserId = async () => {
       try {
-        const res = await fetch("https://54.180.117.72/api/auth/me", {
+        const res = await fetch("https://looksy.p-e.kr.72/api/auth/me", {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -132,7 +132,7 @@ export default function Collections() {
     setSearchParams(newParams);
   
     // ✅ 서버에 요청
-    const res = await fetch(`https://54.180.117.72/api/outfits?${newParams.toString()}`);
+    const res = await fetch(`https://looksy.p-e.kr.72/api/outfits?${newParams.toString()}`);
     const data = await res.json();
     setOutfits(data);
   };
@@ -140,7 +140,7 @@ export default function Collections() {
   useEffect(() => {
     const fetchFilteredOutfits = async () => {
       try {
-        const res = await fetch(`https://54.180.117.72/api/outfits?${searchParams.toString()}`);
+        const res = await fetch(`https://looksy.p-e.kr/api/outfits?${searchParams.toString()}`);
         const data = await res.json();
         setOutfits(data);
       } catch (err) {
@@ -193,7 +193,7 @@ export default function Collections() {
   }, [location]);
 
   useEffect(() => {
-    fetch('https://54.180.117.72/api/outfits')
+    fetch('https://looksy.p-e.kr.72/api/outfits')
       .then((res) => res.json())
       .then(setOutfits)
       .catch((err) => console.error('데이터 로딩 실패:', err));
