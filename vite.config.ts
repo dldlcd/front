@@ -9,4 +9,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  build: {
+    minify: 'esbuild',   // ✅ eval 제거용 minifier
+    sourcemap: false      // ✅ eval 기반 source map 제거
+  }
 });
