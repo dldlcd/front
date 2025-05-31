@@ -57,22 +57,24 @@ export default function OutfitDetail() {
 
   // 컴포넌트가 마운트될 때 좋아요 상태를 가져오는 함수
   
-  const fetchOutfit = async (id: string, setOutfit: React.Dispatch<React.SetStateAction<Outfit | null>>) => {
-    const token = localStorage.getItem("token");
-    const url = token
-      ? `https://looksy.p-e.kr/api/outfits/auth/${id}`
-      : `https://looksy.p-e.kr/api/outfits/${id}`;
-  
-    try {
-      const res = await fetch(url, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
-      });
-      const data = await res.json();
-      setOutfit(data);
-    } catch (error) {
-      console.error("Error fetching outfit:", error);
-    }
-  };
+  const fetchOutfit = async (
+    id: string,
+    setOutfit: React.Dispatch<React.SetStateAction<Outfit | null>>
+    ) => {
+      const token = localStorage.getItem("token");
+      const url = `https://looksy.p-e.kr/api/outfits/${id}`;
+
+      try {
+        const res = await fetch(url, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
+
+        const data = await res.json();
+        setOutfit(data);
+      } catch (error) {
+        console.error("Error fetching outfit:", error);
+      }
+    };
   
   useEffect(() => {
     const token = localStorage.getItem("token");
@@ -275,10 +277,12 @@ export default function OutfitDetail() {
 
           {/* 태그 */}
           <div className="flex gap-2 flex-wrap mt-2">
-            {[ outfit.style , outfit.situation , outfit.season].map((tag) => (
-              <span key={tag} className="text-blue-500 text-sm">
-                #{tagMap[tag] || tag}
-              </span>
+            {[outfit.style, outfit.situation, outfit.season]
+              .filter((tag) => tag) // undefined, null, "" 제거
+              .map((tag) => (
+                <span key={tag} className="text-blue-500 text-sm">
+                  #{tagMap[tag] || tag}
+                </span>
             ))}
           </div>
 
