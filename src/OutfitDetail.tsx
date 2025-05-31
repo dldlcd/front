@@ -219,7 +219,7 @@ useEffect(() => {
           onClick={() => navigate(`/user/${outfit.userId}`)}
         >
           <img
-              src={outfit.userProfileImage || "/default_image.png"}
+              src={userProfileImage || "/default_image.png"}
               onError={(e) => {
                 e.currentTarget.src = "/default_image.png";
               }}
