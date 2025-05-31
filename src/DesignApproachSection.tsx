@@ -18,6 +18,23 @@ interface CollectionSectionProps {
   className?: string;
 }
 
+interface Outfit {
+  id: number
+  title: string;
+  description: string;
+  imageUrl: string;
+  color: string;
+  season: string;
+  situation: string;
+  style: string;
+  likes: number;
+  liked: boolean;
+  userId: number;
+  userNickname: string;
+  userProfileImage: string;
+  bookmarked: boolean;
+}
+
 
 
 export default function DesignApproachSection(): React.JSX.Element {
@@ -25,6 +42,7 @@ export default function DesignApproachSection(): React.JSX.Element {
 
   const [outfits, setOutfits] = useState<Outfit[]>([]);
   const navigate = useNavigate();
+  const [outfit, setOutfit] = useState<Outfit | null>(null);
 
   const [page, setPage] = useState(0);
   const itemsPerPage = 4
@@ -175,51 +193,62 @@ export default function DesignApproachSection(): React.JSX.Element {
       <div className="grid grid-cols-4 gap-6 mb-8">
       {outfits.slice(page * itemsPerPage, (page + 1) * itemsPerPage).map((outfit) => (
           <Card
-            key={outfit.id}
-            className="border border-solid border-[#d6d6d6] rounded-none"
-          >
-            <CardContent className="p-0 relative">
-              <div className="relative">
-                
-                <img
-                  onClick={() => navigate(`/outfit/${outfit.id}`)}
-                  src={outfit.imageUrl}
-                  alt={outfit.description}
-                  className="w-full h-[313px] object-cover"
-                />
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[34px] h-[34px] bg-[#dbdbdb70] opacity-[0.66] rounded-none"
-                >
-                  
-                </Button>
-              </div>
-              <div className="p-3">
-                <div className="font-medium text-[#000000a8] text-xs">
-                  {outfit.type}
-                  
-                </div>
-                <div className="flex font-medium text-black text-sm mt-1 items-center justify-between">
-                <button
-                  onClick={() => toggleLike(outfit.id)}
-                  className="absolute top-2 right-2 bg-white/80 rounded-full p-1 shadow hover:scale-110 transition-all"
+              key={outfit.id}
+              className="border border-solid border-[#d6d6d6] rounded-none"
+            >
+              <CardContent className="p-0 relative">
+                <div className="relative">
+                  <img
+                    onClick={() => navigate(`/outfit/${outfit.id}`)}
+                    src={outfit.imageUrl}
+                    alt={outfit.description}
+                    className="w-full h-[313px] object-cover"
+                  />
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[34px] h-[34px] bg-[#dbdbdb70] opacity-[0.66] rounded-none"
                   >
-                  {outfit.liked ? (
-                    <Heart className="text-red-500 fill-red-500 w-5 h-5" />
-                  ) : (
-                    <HeartOff className="text-gray-400 w-5 h-5" />
-                  )}
-                </button>
+                    {/* 버튼 아이콘 (예: 저장) 넣을 수 있음 */}
+                  </Button>
                 </div>
-                <div className="p-3 text-sm text-gray-700 font-light border-t border-gray-200 flex justify-between items-center">
-                  <span>{outfit.description}</span>
-                  <span className="text-xs text-gray-500 ml-2">❤️ {outfit.likes}</span>
+
+                <div className="p-3 space-y-2">
+                  {/* TYPE */}
+                  <div>
+                    {[outfit.style, outfit.situation, outfit.season].filter(Boolean).map((tag, idx, arr) => (
+                      <span key={tag} className="text-blue-500 text-sm">
+                        #{tag}{idx < arr.length - 1 && ' '}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="font-medium text-[#000000a8] text-xs truncate">
+                    {outfit.type}
+                  </div>
+
+                  {/* 하트 버튼 */}
+                  <button
+                    onClick={() => toggleLike(outfit.id)}
+                    className="absolute top-2 right-2 bg-white/80 rounded-full p-1 shadow hover:scale-110 transition-all"
+                  >
+                    {outfit.liked ? (
+                      <Heart className="text-red-500 fill-red-500 w-5 h-5" />
+                    ) : (
+                      <HeartOff className="text-gray-400 w-5 h-5" />
+                    )}
+                  </button>
+
+                  {/* 설명 + 좋아요 */}
+                  <div className="flex justify-between items-center border-t border-gray-200 pt-2">
+                    <span className="text-sm text-gray-700 font-light truncate max-w-[75%]">
+                      {outfit.description}
+                    </span>
+                    <span className="text-xs text-gray-500">❤️ {outfit.likes}</span>
+                  </div>
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
+              </CardContent>
+            </Card>
+                    ))}
       </div>
 
       {/* Navigation Controls */}

@@ -32,8 +32,16 @@ interface ProfileProps {
     profileImage: string;
     bio: string;
   };
-  
 }
+
+const tagMap: { [key: string]: string } = {
+  lovely: '러블리',
+  campus: '캠퍼스룩',
+  summer: '여름',
+  casual: '캐주얼',
+  street: '스트릿',
+  // 필요한 만큼 추가
+};
 
 export default function OutfitDetail() {
   const { id } = useParams<{ id: string }>();
@@ -265,9 +273,9 @@ export default function OutfitDetail() {
 
           {/* 태그 */}
           <div className="flex gap-2 flex-wrap mt-2">
-            {["#소프트", "#바다", "#여행", "#데이트"].map((tag) => (
+            {[ outfit.style , outfit.situation , outfit.season].map((tag) => (
               <span key={tag} className="text-blue-500 text-sm">
-                {tag}
+                #{tagMap[tag] || tag}
               </span>
             ))}
           </div>
