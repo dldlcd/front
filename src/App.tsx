@@ -15,6 +15,7 @@ import UserPage from "./UserPage";
 import ProfileSetup from "./ProfileSetup";
 import ProfileSetupF from "./ProfileSetupF";
 import Bookmark from "./Bookmark";
+import EditOutfit from "./EditOutfit";
 
 const App = () => {
   return (
@@ -32,6 +33,7 @@ const App = () => {
       <Route path="/profile-setup" element={<ProfileSetup />} />
       <Route path="/profile-setup-f" element={<ProfileSetupF />} />
       <Route path="/user/:userId/bookmark" element={<Bookmark />} />
+      <Route path="/edit/:id" element={<EditOutfit />} />
     </Routes>
   );
 };

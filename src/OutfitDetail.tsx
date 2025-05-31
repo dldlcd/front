@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import {  Heart, HeartOff } from "lucide-react";
 import MyProfile from "./Profile";
+import OutfitOptions from "./OutfitOptions";
 
 interface Outfit {
   id: number
@@ -57,6 +58,7 @@ export default function OutfitDetail() {
   const [myId, setMyId] = useState<string | null>(null);
   const [profileImage, setProfileImage] = useState<string>("");
   const [userProfileImage, setUserProfileImage] = useState<string>("");
+  const [menuOpen, setMenuOpen] = useState(false);
   
 
   useEffect(() => {
@@ -230,14 +232,22 @@ useEffect(() => {
             <span className="text-sm font-semibold">{outfit.userNickname}</span>
           </div>
         {outfit.userId === Number(myId) && (
-          <button
-            className="ml-auto text-2xl px-2 py-1 mb-1 hover:bg-gray-100 rounded-full transition-colors"
-            onClick={() => {
-              navigate("/settings");
-            }}
-          >
-            ⋯
-          </button>
+          <div className="relative">
+            <button
+              className="ml-auto text-2xl px-2 py-1 mb-1 hover:bg-gray-100 rounded-full transition-colors"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              ⋯
+            </button>
+
+            {menuOpen && (
+              <OutfitOptions
+                outfit={outfit}
+                myId={Number(myId)}
+                onDelete={() => navigate(`/user/${outfit.userId}`)}
+              />
+            )}
+          </div>
         )}
 
   
