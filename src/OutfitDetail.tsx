@@ -232,10 +232,10 @@ useEffect(() => {
             <span className="text-sm font-semibold">{outfit.userNickname}</span>
           </div>
         {outfit.userId === Number(myId) && (
-          <div className="relative">
+          <div className="relative ml-auto">
             <button
-              className="ml-auto text-2xl px-2 py-1 mb-1 hover:bg-gray-100 rounded-full transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
+              className="text-2xl px-2 py-1 hover:bg-gray-100 rounded-full transition-colors"
             >
               ⋯
             </button>
@@ -244,7 +244,7 @@ useEffect(() => {
               <OutfitOptions
                 outfit={outfit}
                 myId={Number(myId)}
-                onDelete={() => navigate(`/user/${outfit.userId}`)}
+                onDelete={() => navigate(`/mypage`)}
               />
             )}
           </div>
