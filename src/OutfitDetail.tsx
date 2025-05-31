@@ -78,7 +78,7 @@ useEffect(() => {
     if (!outfit) return; // ✅ null일 땐 리턴
 
     try {
-      const res = await fetch(`https://looksy.p-e.kr/api/profile/${outfit.userId}`);
+      const res = await fetch(`https://looksy.p-e.kr/api/auth/profile/${outfit.userId}`);
       const data = await res.json();
       setUserProfileImage(data.profileImage);
     } catch (err) {
