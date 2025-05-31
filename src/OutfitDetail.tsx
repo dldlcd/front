@@ -75,17 +75,21 @@ export default function OutfitDetail() {
 
 useEffect(() => {
   const fetchProfile = async () => {
+    if (!outfit) return; // ✅ null일 땐 리턴
+
     try {
-      const res = await fetch(`https://looksy.p-e.kr/api/auth/profile/${outfit.userId}`);
+      const res = await fetch(`https://looksy.p-e.kr/api/profile/${outfit.userId}`);
       const data = await res.json();
-      setUserProfileImage(data.userProfileImage); // ⚠️ 여기에 실제 키 이름 확인 필요
+      setUserProfileImage(data.profileImage);
     } catch (err) {
       console.error("프로필 불러오기 실패:", err);
     }
   };
 
-  if (outfit.userId) fetchProfile();
-}, [outfit.userId]);
+  if (outfit?.userId) {
+    fetchProfile();
+  }
+}, [outfit]);
 
   // 컴포넌트가 마운트될 때 좋아요 상태를 가져오는 함수
   
