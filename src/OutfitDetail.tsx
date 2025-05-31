@@ -93,12 +93,11 @@ useEffect(() => {
 
   // 컴포넌트가 마운트될 때 좋아요 상태를 가져오는 함수
   
-  const fetchOutfit = async (
-    id: string,
-    setOutfit: React.Dispatch<React.SetStateAction<Outfit | null>>
-    ) => {
-      const token = localStorage.getItem("token");
-      const url = `https://looksy.p-e.kr/api/outfits/${id}`;
+  const fetchOutfit = async (id: string, setOutfit: React.Dispatch<React.SetStateAction<Outfit | null>>) => {
+  const token = localStorage.getItem("token");
+  const url = token
+    ? `https://looksy.p-e.kr/api/outfits/auth/${id}`  // ✅ 로그인한 경우에는 이걸 써야 liked 포함됨
+    : `https://looksy.p-e.kr/api/outfits/${id}`;
 
       try {
         const res = await fetch(url, {
