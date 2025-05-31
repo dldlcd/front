@@ -37,30 +37,40 @@ export default function EditOutfit() {
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
-    if (!token) return alert("로그인이 필요합니다");
+  e.preventDefault();
+  const token = localStorage.getItem("token");
+  if (!token) return alert("로그인이 필요합니다");
 
-    const formData = new FormData();
-    if (imageFile) formData.append("image", imageFile);
-    Object.entries(form).forEach(([key, val]) => formData.append(key, val));
-    formData.append("upload_time", new Date().toISOString().slice(0, 19));
+  const formData = new FormData();
 
-    const res = await fetch(`https://looksy.p-e.kr/api/auth/mypage/outfits/${id}`, {
-      method: "PUT",
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-      body: formData,
-    });
+  if (imageFile) formData.append("image", imageFile);
 
-    if (res.ok) {
-      alert("수정 완료");
-      navigate(`/outfits/${id}`);
-    } else {
-      alert("수정 실패");
+  // ✅ 빈 문자열은 보내지 않도록 조건 추가
+  Object.entries(form).forEach(([key, val]) => {
+    if (val !== "") {
+      formData.append(key, val);
     }
-  };
+  });
+
+  // 선택적으로 보내고 싶으면 이것도 조건 추가 가능
+  formData.append("uploadTime", new Date().toISOString().slice(0, 19));
+
+  const res = await fetch(`https://looksy.p-e.kr/api/auth/mypage/outfits/${id}`, {
+    method: "PUT",
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+    body: formData,
+  });
+
+  if (res.ok) {
+    alert("수정 완료");
+    navigate(`/outfits/${id}`);
+  } else {
+    alert("수정 실패");
+  }
+};
+
 
   return (
     <div className="max-w-md mx-auto my-10 bg-white rounded-2xl shadow-md p-6">
