@@ -231,6 +231,9 @@ export default function Collections() {
         }}
         onClose={() => setShowFilter(false)}
         selectedStyles={searchParams.getAll("style")}
+        selectedGender={searchParams.get("gender") || ""}
+        selectedSeason={searchParams.getAll("season")}
+        selectedTpo={searchParams.get("tpo") || ""}
       />
     </div>
   )}

@@ -40,12 +40,15 @@ interface FilterPanelProps {
   }) => void;
   onClose: () => void;
   selectedStyles: string[];
+  selectedGender: string;
+  selectedSeason: string[];
+  selectedTpo: string;
 }
 
-export default function FilterPanel({ onApply, onClose, selectedStyles }: FilterPanelProps) {
-  const [gender, setGender] = useState<string>("");
-  const [season, setSeason] = useState<string[]>([]);
-  const [tpo, setTpo] = useState("");
+export default function FilterPanel({ onApply, onClose, selectedStyles, selectedGender, selectedSeason, selectedTpo }: FilterPanelProps) {
+  const [gender, setGender] = useState<string>(selectedGender || "");
+  const [season, setSeason] = useState<string[]>(selectedSeason || []);
+  const [tpo, setTpo] = useState<string>(selectedTpo || "");
   const [mood, setMood] = useState<string[]>(selectedStyles || []);
  
  
