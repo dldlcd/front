@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import classNames from "classnames";
 
 const SEASONS = 
@@ -52,7 +52,21 @@ export default function FilterPanel({ onApply, onClose, selectedStyles, selected
   const [mood, setMood] = useState<string[]>(selectedStyles || []);
  
  
-  
+   useEffect(() => {
+    setGender(selectedGender || "");
+  }, [selectedGender]);
+
+  useEffect(() => {
+    setSeason(selectedSeason || []);
+  }, [selectedSeason]);
+
+  useEffect(() => {
+    setTpo(selectedTpo || "");
+  }, [selectedTpo]);
+
+  useEffect(() => {
+    setMood(selectedStyles || []);
+  }, [selectedStyles]);
 
   const handleReset = () => {
     setGender("");     // ✅ 빈 문자열로 초기화
