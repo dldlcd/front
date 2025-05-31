@@ -244,7 +244,7 @@ useEffect(() => {
               <OutfitOptions
                 outfit={outfit}
                 myId={Number(myId)}
-                onDelete={() => navigate(`/mypage`)}
+                onDelete={() => navigate(`/user/${outfit.userId}`)}
               />
             )}
           </div>
