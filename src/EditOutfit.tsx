@@ -65,7 +65,7 @@ export default function EditOutfit() {
 
   if (res.ok) {
     alert("수정 완료");
-    navigate(`/outfits/${id}`);
+    navigate(`/outfit/${id}`);
   } else {
     alert("수정 실패");
   }
