@@ -40,6 +40,8 @@ const tagMap: { [key: string]: string } = {
   summer: '여름',
   casual: '캐주얼',
   street: '스트릿',
+  fall: '가을',
+  
   // 필요한 만큼 추가
 };
 
