@@ -21,6 +21,8 @@ interface Outfit {
   bookmarked: boolean;
 }
 
+
+
 interface ProfileProps {
   profile: {
     id: number;
@@ -53,7 +55,22 @@ export default function OutfitDetail() {
   const [newComment, setNewComment] = useState("");
   const [isCommentOpen, setIsCommentOpen] = useState(false);
   const [myId, setMyId] = useState<string | null>(null);
+  const [profileImage, setProfileImage] = useState<string>("");
   
+
+  useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const res = await fetch(`https://looksy.p-e.kr/api/auth/profile/${myId}`);
+      const data = await res.json();
+      setProfileImage(data.profileImage); // ⚠️ 여기에 실제 키 이름 확인 필요
+    } catch (err) {
+      console.error("프로필 불러오기 실패:", err);
+    }
+  };
+
+  if (myId) fetchProfile();
+}, [myId]);
 
   // 컴포넌트가 마운트될 때 좋아요 상태를 가져오는 함수
   
@@ -428,12 +445,12 @@ export default function OutfitDetail() {
             className="p-2 hover:bg-gray-50 rounded-full transition-colors"
           >
             <img
-              src={outfit.userProfileImage || "/default_image.png"}
-              onError={(e) => {
-                e.currentTarget.src = "/default_image.png";
-              }}
-              alt="My Profile"
-              className="w-6 h-6 rounded-full object-cover border"
+            src={profileImage || "/default_image.png"}
+            onError={(e) => {
+              e.currentTarget.src = "/default_image.png";
+            }}
+            alt="My Profile"
+            className="w-6 h-6 rounded-full object-cover border"
             />
           </button>
         </div>
