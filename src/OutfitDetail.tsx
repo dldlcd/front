@@ -213,11 +213,13 @@ useEffect(() => {
       <div className="h-4"></div>
         {/* 작성자 정보 */}
         
-        <div
-          className="flex items-center gap-3 px-4 pt-[20px] pb-3 cursor-pointer"
-          onClick={() => navigate(`/user/${outfit.userId}`)}
-        >
-          <img
+        <div className="flex items-center gap-3 px-4 pt-[20px] pb-3">
+  {/* 프로필 이미지 + 닉네임: 프로필로 이동 */}
+          <div
+            className="flex items-center gap-3 cursor-pointer"
+            onClick={() => navigate(`/user/${outfit.userId}`)}
+          >
+            <img
               src={userProfileImage || "/default_image.png"}
               onError={(e) => {
                 e.currentTarget.src = "/default_image.png";
@@ -225,8 +227,21 @@ useEffect(() => {
               alt="My Profile"
               className="w-10 h-10 rounded-full object-cover border"
             />
-          <span className="text-sm font-semibold">{outfit.userNickname}</span>
-      </div>
+            <span className="text-sm font-semibold">{outfit.userNickname}</span>
+          </div>
+        {outfit.userId === Number(myId) && (
+          <button
+            className="ml-auto text-2xl px-2 py-1 mb-1 hover:bg-gray-100 rounded-full transition-colors"
+            onClick={() => {
+              navigate("/settings");
+            }}
+          >
+            ⋯
+          </button>
+        )}
+
+  
+        </div>
       
 
         {/* 이미지 */}
