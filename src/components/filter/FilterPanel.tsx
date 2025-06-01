@@ -22,7 +22,6 @@ const MOODS = [
   { id: 'minimal', label: '미니멀' },
   { id: 'office', label: '오피스' },
   { id: 'street', label: '스트릿' },
-  { id: 'date', label: '데이트' },
   { id: 'amercaji', label: '아메카지' },
   { id: 'unique', label: '유니크' },
   { id: 'vintage', label: '빈티지' },

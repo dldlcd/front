@@ -38,14 +38,34 @@ interface ProfileProps {
 }
 
 const tagMap: { [key: string]: string } = {
-  lovely: '러블리',
-  campus: '캠퍼스룩',
+  // TPO
+  daily: '데일리',
+  campus: '캠퍼스',
+  date: '데이트',
+  work: '출근',
+  travel: '여행',
+  outing: '가벼운 외출',
+  workout: '운동',
+
+  // SEASON
+  spring: '봄',
   summer: '여름',
-  casual: '캐주얼',
-  street: '스트릿',
   fall: '가을',
-  
-  // 필요한 만큼 추가
+  winter: '겨울',
+
+  // MOOD (style)
+  casual: '캐주얼',
+  sporty: '스포티',
+  formal: '포멀',
+  minimal: '미니멀',
+  office: '오피스',
+  street: '스트릿',
+  amercaji: '아메카지',
+  lovely: '러블리',
+  vintage: '빈티지',
+  unique: '유니크',
+  retro: '레트로',
+  cityboy: '시티보이',
 };
 
 export default function OutfitDetail() {
