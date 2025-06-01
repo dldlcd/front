@@ -154,7 +154,6 @@ formData.append("upload_time", now);
         <option value="minimal">미니멀</option>
         <option value="office">오피스</option>
         <option value="street">스트릿</option>
-        <option value="date">데이트</option>
         <option value="amercaji">아메카지</option>
         <option value="unique">유니크</option>
         <option value="vintage">빈티지</option>

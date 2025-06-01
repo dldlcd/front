@@ -35,7 +35,6 @@ const FILTER_OPTIONS = [
   { id: 'minimal', label: '미니멀', type: 'style' },
   { id: 'office', label: '오피스', type: 'style' },
   { id: 'street', label: '스트릿', type: 'style' },
-  { id: 'date', label: '데이트', type: 'style' },
   { id: 'amercaji', label: '아메카지', type: 'style' },
   { id: 'unique', label: '유니크', type: 'style' },
   { id: 'vintage', label: '빈티지', type: 'style' },
@@ -46,7 +45,6 @@ const FILTER_OPTIONS = [
   // 성별 필터
   { id: 'male', label: '남', type: 'gender' },
   { id: 'female', label: '여', type: 'gender' },
-  { id: 'unisex', label: '유니섹스', type: 'gender' },
 
   // 계절 필터
   { id: 'spring', label: '봄', type: 'season' },
