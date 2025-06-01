@@ -320,13 +320,7 @@ if (sortedFilterListRef.current.length === 0) {
     }
   }, [location]);
 
-  useEffect(() => {
-    fetch('https://looksy.p-e.kr/api/outfits')
-      .then((res) => res.json())
-      .then(setOutfits)
-      .catch((err) => console.error('데이터 로딩 실패:', err));
-  }, []);
-
+  
   
 
   return (
