@@ -11,6 +11,7 @@ interface Outfit {
   situation?: string;
   season?: string;
   type?: string;
+  title: string
 }
 
 interface CollectionSectionProps {
@@ -94,14 +95,10 @@ export default function CollectionSection({ className }: CollectionSectionProps)
                 </div>
                 <div className="p-3 space-y-2">
                   <div>
-                    {[outfit.style, outfit.situation, outfit.season].filter(Boolean).map((tag, idx, arr) => (
-                      <span key={tag} className="text-blue-500 text-sm">
-                        #{tag}{idx < arr.length - 1 && ' '}
-                      </span>
-                    ))}
+                    {outfit.title}
                   </div>
                   <div className="font-medium text-[#000000a8] text-xs truncate">
-                    {outfit.type}
+                    {outfit.description}
                   </div>
                 </div>
               </CardContent>
