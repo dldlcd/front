@@ -259,24 +259,25 @@ if (sortedFilterListRef.current.length === 0) {
 
 
 
+  useEffect(() => {
+    const fetchFilteredOutfits = async () => {
+      try {
+        const url = searchParams.toString()
+          ? `https://looksy.p-e.kr/api/outfits?${searchParams.toString()}`
+          : `https://looksy.p-e.kr/api/outfits`;
 
-  
-  const location = useLocation();
-    useEffect(() => {
-    const timeout = setTimeout(() => {
-      const url = searchParams.toString()
-        ? `https://looksy.p-e.kr/api/outfits?${searchParams.toString()}`
-        : `https://looksy.p-e.kr/api/outfits`;
-      fetch(url)
-        .then((res) => res.json())
-        .then(setOutfits)
-        .catch((err) => console.error("필터 적용 실패:", err));
-    }, 0);
+        const res = await fetch(url);
+        const data = await res.json();
+        setOutfits(data);
+      } catch (err) {
+        console.error("필터 적용 실패:", err);
+      }
+    };
 
-    return () => clearTimeout(timeout);
-  }, [location.key, searchParams])
+    fetchFilteredOutfits(); // ✅ 항상 호출되도록
+  }, [searchParams]);
 
-  
+
 
 
   // 기존의 홈 버튼 클릭 핸들러 수정
