@@ -230,12 +230,9 @@ if (sortedFilterListRef.current.length === 0) {
   }
 
   if (type === "season") {
-    const current = searchParams.getAll("season");
-    const updated = current.includes(id)
-      ? current.filter((s) => s !== id)
-      : [...current, id];
-    newParams.delete("season");
-    updated.forEach((s) => newParams.append("season", s));
+  const current = searchParams.get("season");
+  if (current === id) newParams.delete("season");
+  else newParams.set("season", id);
   }
 
   if (type === "tpo") {
