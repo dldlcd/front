@@ -35,19 +35,19 @@ interface FilterPanelProps {
   onApply: (filters: {
     style: string[];
     gender: string;
-    season: string[];
+    season: string;
     tpo: string[];
   }) => void;
   onClose: () => void;
   selectedStyles: string[];
   selectedGender: string;
-  selectedSeason: string[];
+  selectedSeason: string;
   selectedTpo: string[]
 }
 
 export default function FilterPanel({ onApply, onClose, selectedStyles, selectedGender, selectedSeason, selectedTpo }: FilterPanelProps) {
   const [gender, setGender] = useState<string>(selectedGender || "");
-  const [season, setSeason] = useState<string[]>(selectedSeason || []);
+  const [season, setSeason] = useState<string>(selectedSeason || "");
   const [tpo, setTpo] = useState<string[]>(selectedTpo || []);
   const [mood, setMood] = useState<string[]>(selectedStyles || []);
  
@@ -57,7 +57,7 @@ export default function FilterPanel({ onApply, onClose, selectedStyles, selected
   }, [selectedGender]);
 
   useEffect(() => {
-    setSeason(selectedSeason || []);
+    setSeason(selectedSeason || "");
   }, [selectedSeason]);
 
   useEffect(() => {
@@ -70,7 +70,7 @@ export default function FilterPanel({ onApply, onClose, selectedStyles, selected
 
   const handleReset = () => {
     setGender("");     // ✅ 빈 문자열로 초기화
-    setSeason([]);     // ✅ 여러 개 선택 가능하므로 배열
+    setSeason("");     // ✅ 여러 개 선택 가능하므로 배열
     setTpo([]);        // ✅ 단일 선택이므로 빈 문자열
     setMood([]);       // ✅ 배열
   };
@@ -164,11 +164,11 @@ export default function FilterPanel({ onApply, onClose, selectedStyles, selected
           {SEASONS.map((s) => (
             <button
               key={s.id}
-              className={itemClass(season.includes(s.id))}
-              onClick={() => setSeason(toggle(season, s.id))}
+              className={itemClass(season === s.id)}
+              onClick={() => setSeason(season === s.id ? "" : s.id)}
             >
-              <div className={checkboxIcon(season.includes(s.id))}>
-                {season.includes(s.id) ? '✓' : ''}
+              <div className={checkboxIcon(season === s.id )}>
+                {season === s.id ? '✓' : ''}
               </div>
               <span>{s.label}</span>
             </button>

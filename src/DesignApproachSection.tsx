@@ -95,23 +95,66 @@ export default function DesignApproachSection(): React.JSX.Element {
 
   
 
+//_-------------------------------------------------------------------------------------- 추천 코디
     const fetchRecommendedOutfits = async () => {
-    const tagRes = await fetch("https://looksy.p-e.kr/api/searchlog/recommend", {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
-      },
-    });
+  const token = localStorage.getItem("token");
+  let tags = null;
 
-     const { styles, tpo, season } = await tagRes.json();
-    const params = new URLSearchParams();
-    styles?.forEach((s: string) => params.append("style", s));
-    season?.forEach((s: string) => params.append("season", s)); // ✅ 추가된 부분
-    tpo?.forEach((s: string) => params.append("tpo", s));
+  // 1. 로그인 했으면 추천 태그 가져오기
+  if (token) {
+    try {
+      const res = await fetch("https://looksy.p-e.kr/api/searchlog/recommend", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
 
+      if (res.ok) {
+        tags = await res.json();
+      }
+    } catch (err) {
+      console.error("추천 태그 불러오기 실패:", err);
+    }
+  }
+
+  // 2. 로그인 안했거나 추천 없음 → popular fallback
+  if (!tags || (!tags.styles?.length && !tags.tpo?.length)) {
+    try {
+      const res = await fetch("https://looksy.p-e.kr/api/searchlog/popular");
+      if (res.ok) {
+        tags = await res.json();
+        console.log("Fallback으로 인기 태그 사용 중", tags);
+      }
+    } catch (err) {
+      console.error("인기 태그 불러오기 실패:", err);
+      return;
+    }
+  }
+
+  // 3. 태그를 기반으로 outfit 요청
+  const params = new URLSearchParams();
+
+  if (Array.isArray(tags.styles)) {
+    tags.styles.forEach((s: string) => params.append("style", s));
+  }
+
+  if (Array.isArray(tags.tpo)) {
+    tags.tpo.forEach((t: string) => params.append("tpo", t));
+  } else if (typeof tags.tpo === "string") {
+    params.append("tpo", tags.tpo);
+  }
+
+  try {
     const outfitRes = await fetch(`https://looksy.p-e.kr/api/outfits?${params.toString()}`);
+    if (!outfitRes.ok) throw new Error("추천 outfit 불러오기 실패");
+
     const outfitData = await outfitRes.json();
-    setRecommended(outfitData); // IV COLLECTIONS에 뿌릴 추천 리스트
-  };
+    setRecommended(outfitData);
+  } catch (error) {
+    console.error("추천 outfit 불러오기 오류:", error);
+  }
+};
+//-------------------------------------------------------------------------------------------------------------------
  
   useEffect(() => {
     fetchOutfits();
