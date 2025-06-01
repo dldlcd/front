@@ -102,20 +102,22 @@ export default function DesignApproachSection(): React.JSX.Element {
       },
     });
 
-    const { styles, tpo } = await tagRes.json();
+     const { styles, tpo, season } = await tagRes.json();
     const params = new URLSearchParams();
-    styles.forEach((s: string) => params.append("style", s));
-    if (tpo) params.set("tpo", tpo);
+    styles?.forEach((s: string) => params.append("style", s));
+    season?.forEach((s: string) => params.append("season", s)); // ✅ 추가된 부분
+    tpo?.forEach((s: string) => params.append("tpo", s));
 
     const outfitRes = await fetch(`https://looksy.p-e.kr/api/outfits?${params.toString()}`);
     const outfitData = await outfitRes.json();
     setRecommended(outfitData); // IV COLLECTIONS에 뿌릴 추천 리스트
   };
-
+ 
   useEffect(() => {
     fetchOutfits();
     fetchRecommendedOutfits();
   }, []);
+  //
 
 
 
