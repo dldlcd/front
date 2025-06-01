@@ -21,24 +21,58 @@ interface Outfit {
   style: string;
 }
 
+interface FilterOption {
+  id: string;
+  label: string;
+  type: 'style' | 'season' | 'tpo' | 'gender';
+}
+
 const FILTER_OPTIONS = [
-  
-  { id: 'casual', label: '캐주얼' },
-  { id: 'sporty', label: '스포티' },
-  { id: 'formal', label: '포멀' },
-  { id: 'minimal', label: '미니멀' },
-  { id: 'office', label: '오피스' },
-  { id: 'street', label: '스트릿' },
-  { id: 'date', label: '데이트' },
-  { id: 'amercaji', label: '아메카지' },
-  { id: 'unique', label: '유니크' },
-  { id: 'vintage', label: '빈티지' },
-  { id: 'lovely', label: '러블리' },
-  { id: 'cityboy', label: '시티보이' },
-  { id: 'retro', label: '레트로' }
+  // 스타일 필터
+  { id: 'casual', label: '캐주얼', type: 'style' },
+  { id: 'sporty', label: '스포티', type: 'style' },
+  { id: 'formal', label: '포멀', type: 'style' },
+  { id: 'minimal', label: '미니멀', type: 'style' },
+  { id: 'office', label: '오피스', type: 'style' },
+  { id: 'street', label: '스트릿', type: 'style' },
+  { id: 'date', label: '데이트', type: 'style' },
+  { id: 'amercaji', label: '아메카지', type: 'style' },
+  { id: 'unique', label: '유니크', type: 'style' },
+  { id: 'vintage', label: '빈티지', type: 'style' },
+  { id: 'lovely', label: '러블리', type: 'style' },
+  { id: 'cityboy', label: '시티보이', type: 'style' },
+  { id: 'retro', label: '레트로', type: 'style' },
 
+  // 성별 필터
+  { id: 'male', label: '남', type: 'gender' },
+  { id: 'female', label: '여', type: 'gender' },
+  { id: 'unisex', label: '유니섹스', type: 'gender' },
 
+  // 계절 필터
+  { id: 'spring', label: '봄', type: 'season' },
+  { id: 'summer', label: '여름', type: 'season' },
+  { id: 'fall', label: '가을', type: 'season' },
+  { id: 'winter', label: '겨울', type: 'season' },
+
+  // TPO 필터
+  { id: 'daily', label: '데일리', type: 'tpo' },
+  { id: 'campus', label: '캠퍼스', type: 'tpo' },
+  { id: 'date', label: '데이트', type: 'tpo' },
+  { id: 'work', label: '출근', type: 'tpo' },
+  { id: 'travel', label: '여행', type: 'tpo' },
+  { id: 'outing', label: '가벼운 외출', type: 'tpo' },
+  { id: 'workout', label: '운동', type: 'tpo' }
 ];
+
+
+function shuffleArray<T>(arr: T[]): T[] {
+  const copy = [...arr];
+  for (let i = copy.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [copy[i], copy[j]] = [copy[j], copy[i]];
+  }
+  return copy;
+}
 
 export default function Collections() {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
@@ -63,6 +97,39 @@ export default function Collections() {
   const [showFilter, setShowFilter] = useState(false);
 
   const selectedStyles = searchParams.getAll("style");
+  const selectedSeason = searchParams.getAll("season");
+  const selectedTpo = searchParams.getAll("tpo");
+
+  
+
+  // 선택된 태그 ID 목록
+    const selectedItems= [
+      ...selectedStyles.map((id) => ({ id, type: 'style' })),
+      ...selectedSeason.map((id) => ({ id, type: 'season' })),
+      ...selectedTpo.map((id) => ({ id, type: 'tpo' })),
+      ...(searchParams.get('gender') ? [{ id: searchParams.get('gender')!, type: 'gender' }] : []),
+    ];
+
+  const selectedFilterList: FilterOption[] = selectedItems
+  .map(({ id, type }) =>
+    FILTER_OPTIONS.find((f) => f.id === id && f.type === type)
+  )
+  .filter((f): f is FilterOption => f !== undefined);
+
+  const selectedKeys = new Set(selectedFilterList.map(f => `${f.type}:${f.id}`));
+const unselected = FILTER_OPTIONS.filter(
+  (f) => !selectedKeys.has(`${f.type}:${f.id}`)
+);
+
+const sortedFilterList = [...selectedFilterList, ...shuffleArray(unselected)].slice(0, 13);
+
+
+  const [activeFilters, setActiveFilters] = useState({
+  style: [] as string[],
+  season: [] as string[],
+  tpo: [] as string[],
+  gender: "",
+  });
 
 
 
@@ -116,26 +183,55 @@ export default function Collections() {
     fetchUserId();
   }, []);
 
-  const handleTagClick = async (tag: string) => {
-    let current = searchParams.getAll("style");
-  
-    // ✅ 'all' 제거
-    current = current.filter((s) => s !== "all");
-  
-    const updated = current.includes(tag)
-      ? current.filter((s) => s !== tag)
-      : [...current, tag];
-  
-    const newParams = new URLSearchParams(searchParams.toString());
+
+
+   // 그리드 클릭 처리
+  const handleTagClick = async (id: string, type: string) => {
+  const newParams = new URLSearchParams(searchParams.toString());
+
+  if (type === "style") {
+    const current = searchParams.getAll("style");
+    const updated = current.includes(id)
+      ? current.filter((s) => s !== id)
+      : [...current, id];
     newParams.delete("style");
-    updated.forEach((v) => newParams.append("style", v));
-    setSearchParams(newParams);
-  
-    // ✅ 서버에 요청
-    const res = await fetch(`https://looksy.p-e.kr/api/outfits?${newParams.toString()}`);
-    const data = await res.json();
-    setOutfits(data);
-  };
+    updated.forEach((s) => newParams.append("style", s));
+  }
+
+  if (type === "season") {
+    const current = searchParams.getAll("season");
+    const updated = current.includes(id)
+      ? current.filter((s) => s !== id)
+      : [...current, id];
+    newParams.delete("season");
+    updated.forEach((s) => newParams.append("season", s));
+  }
+
+  if (type === "tpo") {
+    const current = searchParams.getAll("tpo");
+    const updated = current.includes(id)
+      ? current.filter((s) => s !== id)
+      : [...current, id];
+    newParams.delete("tpo");
+    updated.forEach((s) => newParams.append("tpo", s));
+  }
+
+  if (type === "gender") {
+    const current = searchParams.get("gender");
+    if (current === id) newParams.delete("gender");
+    else newParams.set("gender", id);
+  }
+
+  setSearchParams(newParams);
+
+  const res = await fetch(`https://looksy.p-e.kr/api/outfits?${newParams.toString()}`);
+  const data = await res.json();
+  setOutfits(data);
+};
+
+
+
+
   
   useEffect(() => {
     const fetchFilteredOutfits = async () => {
@@ -207,34 +303,21 @@ export default function Collections() {
      {showFilter && (
     <div className="max-w-7xl mx-auto pt-14 mt-1"> {/* 헤더 높이 만큼 여백 줌 */}
       <FilterPanel
-        onApply={(filters) => {
-          const newParams = new URLSearchParams();
-
-          // ✅ style
-          filters.style.forEach((v) => newParams.append("style", v));
-
-          // ✅ gender
-          if (filters.gender) {
-            newParams.set("gender", filters.gender);
-          }
-
-          // ✅ season (여러개)
-          filters.season.forEach((v) => newParams.append("season", v));
-
-          // ✅ tpo
-          if (filters.tpo) {
-            newParams.set("tpo", filters.tpo);
-          }
-
-          setSearchParams(newParams); // 🔥 핵심
-          setShowFilter(false);
-        }}
-        onClose={() => setShowFilter(false)}
-        selectedStyles={searchParams.getAll("style")}
-        selectedGender={searchParams.get("gender") || ""}
-        selectedSeason={searchParams.getAll("season")}
-        selectedTpo={searchParams.get("tpo") || ""}
-      />
+            onApply={(filters) => {
+              const newParams = new URLSearchParams();
+              filters.style.forEach((v) => newParams.append("style", v));
+              filters.season.forEach((v) => newParams.append("season", v));
+              if (filters.gender) newParams.set("gender", filters.gender);
+              filters.tpo.forEach((v) => newParams.append("tpo", v));
+              setSearchParams(newParams);
+              setShowFilter(false);
+            }}
+            onClose={() => setShowFilter(false)}
+            selectedStyles={selectedStyles}
+            selectedGender={searchParams.get("gender") || ""}
+            selectedSeason={selectedSeason}
+            selectedTpo={selectedTpo}
+          />
     </div>
   )}
     <header className="bg-white border-b border-gray-200 fixed top-0 w-full z-10">
@@ -339,21 +422,32 @@ export default function Collections() {
             <SlidersHorizontal className="w-6 h-6 text-gray-600" />
           </Button>
             
-            {FILTER_OPTIONS.map((filter) => (
-              <div key={filter.id} className="flex flex-col items-center space-y-1 flex-shrink-0">
-                <button
-                  onClick={() => handleTagClick(filter.id)}
-                  className={`w-16 h-16 rounded-full flex items-center justify-center p-0.5 ${selectedStyles.includes(filter.id) ? 'bg-gradient-to-tr from-yellow-400 to-pink-500' : 'bg-gradient-to-tr from-gray-200 to-gray-300'}`}
-                >
-                  <div className="bg-white rounded-full p-0.5 w-full h-full flex items-center justify-center">
-                    <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-xs">
-                      {filter.label.slice(0, 5)}
+            {sortedFilterList.map((filter) => {
+              const isActive =
+                selectedStyles.includes(filter.id) && filter.type === "style" ||
+                selectedSeason.includes(filter.id) && filter.type === "season" ||
+                selectedTpo.includes(filter.id) && filter.type === "tpo" ||
+                searchParams.get("gender") === filter.id && filter.type === "gender";
+
+              return (
+                <div key={`${filter.type}:${filter.id}`} className="flex flex-col items-center space-y-1 flex-shrink-0">
+                  <button
+                    onClick={() => handleTagClick(filter.id, filter.type)}
+                    className={`w-16 h-16 rounded-full flex items-center justify-center p-0.5 ${
+                      isActive
+                        ? 'bg-gradient-to-tr from-yellow-400 to-pink-500'
+                        : 'bg-gradient-to-tr from-gray-200 to-gray-300'
+                    }`}
+                  >
+                    <div className="bg-white rounded-full p-0.5 w-full h-full flex items-center justify-center">
+                      <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-xs">
+                        {filter.label.slice(0, 5)}
+                      </div>
                     </div>
-                  </div>
-                </button>
-                <span className="text-xs text-center"></span>
-              </div>
-            ))}
+                  </button>
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

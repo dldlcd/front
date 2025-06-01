@@ -36,19 +36,19 @@ interface FilterPanelProps {
     style: string[];
     gender: string;
     season: string[];
-    tpo: string;
+    tpo: string[];
   }) => void;
   onClose: () => void;
   selectedStyles: string[];
   selectedGender: string;
   selectedSeason: string[];
-  selectedTpo: string;
+  selectedTpo: string[]
 }
 
 export default function FilterPanel({ onApply, onClose, selectedStyles, selectedGender, selectedSeason, selectedTpo }: FilterPanelProps) {
   const [gender, setGender] = useState<string>(selectedGender || "");
   const [season, setSeason] = useState<string[]>(selectedSeason || []);
-  const [tpo, setTpo] = useState<string>(selectedTpo || "");
+  const [tpo, setTpo] = useState<string[]>(selectedTpo || []);
   const [mood, setMood] = useState<string[]>(selectedStyles || []);
  
  
@@ -61,7 +61,7 @@ export default function FilterPanel({ onApply, onClose, selectedStyles, selected
   }, [selectedSeason]);
 
   useEffect(() => {
-    setTpo(selectedTpo || "");
+    setTpo(selectedTpo || []);
   }, [selectedTpo]);
 
   useEffect(() => {
@@ -71,7 +71,7 @@ export default function FilterPanel({ onApply, onClose, selectedStyles, selected
   const handleReset = () => {
     setGender("");     // ✅ 빈 문자열로 초기화
     setSeason([]);     // ✅ 여러 개 선택 가능하므로 배열
-    setTpo("");        // ✅ 단일 선택이므로 빈 문자열
+    setTpo([]);        // ✅ 단일 선택이므로 빈 문자열
     setMood([]);       // ✅ 배열
   };
 
@@ -145,11 +145,11 @@ export default function FilterPanel({ onApply, onClose, selectedStyles, selected
             {TPOS.map((t) => (
               <button
                 key={t.id}
-                className={itemClass(tpo === t.id)}
-                onClick={() => setTpo(t.id)}
+                className={itemClass(tpo.includes(t.id))}
+                onClick={() => setTpo(toggle(tpo, t.id))}
               >
-                <div className={checkboxIcon(tpo === t.id)}>
-                  {tpo === t.id ? '✓' : ''}
+                <div className={checkboxIcon(tpo.includes(t.id))}>
+                  {tpo.includes(t.id) ? '✓' : ''}
                 </div>
                 <span>{t.label}</span>
               </button>
