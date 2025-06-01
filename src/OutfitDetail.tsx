@@ -358,12 +358,16 @@ useEffect(() => {
           {/* 태그 */}
           <div className="flex gap-2 flex-wrap mt-2">
             {[outfit.style, outfit.situation, outfit.season]
-              .filter((tag) => tag)
-              .map((tag) => (
-                <span key={tag} className="text-blue-500 text-sm">
-                  #{tagMap[tag.toLowerCase()] || tag}
-                </span>
-            ))}
+              .filter(Boolean)
+              .map((tag) => {
+                const lowerTag = tag.toLowerCase();
+                console.log("태그 확인:", lowerTag, "->", tagMap[lowerTag]);
+                return (
+                  <span key={tag} className="text-blue-500 text-sm">
+                    #{tagMap[lowerTag] || tag}
+                  </span>
+                );
+              })}
           </div>
 
           {/* 날짜 */}
