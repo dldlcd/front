@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+
 
 .homeTitleBox {
     display: flex;
@@ -22,3 +20,4 @@ margin-left: unset !important;
 html {
   overflow-y: scroll;
 }
+   
