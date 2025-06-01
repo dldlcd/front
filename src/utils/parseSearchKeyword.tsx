@@ -11,8 +11,8 @@ export function parseSearchKeyword(keyword: string) {
     const lower = keyword.toLowerCase();
   
     // 🔹 Gender
-    if (lower.includes("남") || lower.includes("man")) result.gender = "male";
-    else if (lower.includes("여") || lower.includes("woman")) result.gender = "female";
+    if (lower.includes("남성") || lower.includes("man")) result.gender = "male";
+    else if (lower.includes("여성") || lower.includes("woman")) result.gender = "female";
   
     // 🔹 Style
     const styleMap = {
@@ -32,7 +32,7 @@ export function parseSearchKeyword(keyword: string) {
   
     // 🔹 TPO
     const tpoMap = {
-      데일리: "daily", 캠퍼스: "campus", 여행: "travel", 운동: "exercise",
+      데일리: "daily", 캠퍼스: "campus", 여행: "travel", 운동: "workout",
       출근: "work", 외출: "outing", 소개팅: "date"
     };
     for (const [kor, eng] of Object.entries(tpoMap)) {

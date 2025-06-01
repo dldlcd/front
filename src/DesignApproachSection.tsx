@@ -209,7 +209,7 @@ export default function DesignApproachSection(): React.JSX.Element {
                     size="icon"
                     className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[34px] h-[34px] bg-[#dbdbdb70] opacity-[0.66] rounded-none"
                   >
-                    {/* 버튼 아이콘 (예: 저장) 넣을 수 있음 */}
+                    
                   </Button>
                 </div>
 

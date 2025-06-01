@@ -7,26 +7,23 @@ interface Outfit {
   imageUrl: string; 
   description: string;
   likes: number;
+  style?: string;
+  situation?: string;
+  season?: string;
+  type?: string;
 }
 
 interface CollectionSectionProps {
   className?: string;
 }
 
-const topProducts: Outfit[] = [
-  { id: 1000, imageUrl: "/image-41.png", description: "Wool Blend Puffer Jacket", likes: 1},
-  { id: 1001, imageUrl: "/image-40.png", description: "Slim-Fit Suit Jacket" , likes: 100},
-  { id: 1002, imageUrl: "/image-15.png", description: "Relaxed Fit Linen T-Shirt" , likes: 3},
-  { id: 1003, imageUrl: "/image-16.png", description: "Oversized Fit Shirt" , likes: 0},
-  { id: 1004, imageUrl: "/image-17.png", description: "Classic Leather Jacket" , likes: 0},
-  { id: 1005, imageUrl: "/image-34.png", description: "Classic Leather Jacket" , likes: 0},
-  { id: 1006, imageUrl: "/image-35.png", description: "Oversized Fit Shirt" , likes: 0},
-  { id: 1007, imageUrl: "/image-36.png", description: "Classic Leather Jacket" , likes: 0},
-  { id: 1008, imageUrl: "/image-38.png", description: "Classic Leather Jacket" , likes: 0},
-];
+
+
+const itemsPerPage = 4;
 
 export default function CollectionSection({ className }: CollectionSectionProps) {
   const [outfits, setOutfits] = useState<Outfit[]>([]);
+  const [page, setPage] = useState(0);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -62,7 +59,6 @@ export default function CollectionSection({ className }: CollectionSectionProps)
       {outfits.length === 0 ? (
         <div className="w-full flex flex-col items-center justify-center py-16 text-center text-gray-400">
             <svg
-              
               className="h-16 w-16 mb-4 text-gray-300"
               fill="none"
               viewBox="0 0 24 24"
@@ -80,31 +76,39 @@ export default function CollectionSection({ className }: CollectionSectionProps)
               나만의 첫 코디를 등록해보세요 ✨
             </p>
         </div>
-      
       ) : (
-        <div className="overflow-x-auto">
-          <div className="flex gap-4">
-            {outfits.map((outfit) => (
-              <div key={outfit.id} className="min-w-[18rem] border rounded-lg shadow-md overflow-hidden">
-                <Card className="border-none shadow-none">
-                  <CardContent className="p-0">
-                    <img
-                      onClick={() => navigate(`/outfit/${outfit.id}`)}
-                      src={outfit.imageUrl}
-                      alt="Outfit"
-                      className="w-full h-60 object-cover"
-                    />
-                    <div className="p-3 text-sm text-gray-700 font-light border-t border-gray-200 flex justify-between items-center">
-                      <span>{outfit.description}</span>
-                    </div>
-                  </CardContent>
-                </Card>
-              </div>
-            ))}
-          </div>
+        <div className="grid grid-cols-4 gap-6 mb-8">
+          {outfits.slice(page * itemsPerPage, (page + 1) * itemsPerPage).map((outfit) => (
+            <Card
+              key={outfit.id}
+              className="border border-solid border-[#d6d6d6] rounded-none"
+            >
+              <CardContent className="p-0 relative">
+                <div className="relative">
+                  <img
+                    onClick={() => navigate(`/outfit/${outfit.id}`)}
+                    src={outfit.imageUrl}
+                    alt={outfit.description}
+                    className="w-full h-[313px] object-cover"
+                  />
+                </div>
+                <div className="p-3 space-y-2">
+                  <div>
+                    {[outfit.style, outfit.situation, outfit.season].filter(Boolean).map((tag, idx, arr) => (
+                      <span key={tag} className="text-blue-500 text-sm">
+                        #{tag}{idx < arr.length - 1 && ' '}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="font-medium text-[#000000a8] text-xs truncate">
+                    {outfit.type}
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
         </div>
       )}
-
     </section>
   );
 }

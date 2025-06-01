@@ -463,7 +463,9 @@ useEffect(() => {
 
           
           {/* 검색 버튼 */}
-          <button className="p-2 hover:bg-gray-50 rounded-full transition-colors">
+          <button className="p-2 hover:bg-gray-50 rounded-full transition-colors"
+            onClick={() => navigate('/collections')}>
+            
             <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
@@ -483,19 +485,26 @@ useEffect(() => {
 
           
           {/* 마이페이지 버튼 */}
-          <button 
-            onClick={() => navigate(`/user/${myId}`)}
-            className="p-2 hover:bg-gray-50 rounded-full transition-colors"
-          >
-            <img
-            src={profileImage || "/default_image.png"}
-            onError={(e) => {
-              e.currentTarget.src = "/default_image.png";
-            }}
-            alt="My Profile"
-            className="w-6 h-6 rounded-full object-cover border"
-            />
-          </button>
+          <button
+              onClick={() => {
+                const token = localStorage.getItem("token");
+                if (token && myId) {
+                  navigate(`/user/${myId}`);
+                } else {
+                  navigate("/signin");
+                }
+              }}
+              className="p-2 hover:bg-gray-50 rounded-full transition-colors"
+            >
+              <img
+                src={profileImage || "/default_image.png"}
+                onError={(e) => {
+                  e.currentTarget.src = "/default_image.png";
+                }}
+                alt="My Profile"
+                className="w-6 h-6 rounded-full object-cover border"
+              />
+            </button>
         </div>
       </div>
     </div>

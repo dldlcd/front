@@ -120,8 +120,8 @@ export default function EditOutfit() {
             required
           >
             <option value="">선택</option>
-            <option value="male">남</option>
-            <option value="female">여</option>
+            <option value="male">남성</option>
+            <option value="female">여성</option>
           </select>
         </div>
 

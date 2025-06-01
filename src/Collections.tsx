@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo, useRef } from 'react';
 import {
   Search, ShoppingBag, User, LogIn, LogOut,
   Home as HomeIcon, Heart, MessageCircle, Bookmark,
@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button";
 import FilterButton from "@/components/filter/FilterButton";
 import FilterPanel from "@/components/filter/FilterPanel";
 import { parseSearchKeyword } from "@/utils/parseSearchKeyword";
+
 
 interface Outfit {
   id: number;
@@ -28,7 +29,6 @@ interface FilterOption {
 }
 
 const FILTER_OPTIONS = [
-  // 스타일 필터
   { id: 'casual', label: '캐주얼', type: 'style' },
   { id: 'sporty', label: '스포티', type: 'style' },
   { id: 'formal', label: '포멀', type: 'style' },
@@ -42,25 +42,30 @@ const FILTER_OPTIONS = [
   { id: 'cityboy', label: '시티보이', type: 'style' },
   { id: 'retro', label: '레트로', type: 'style' },
 
-  // 성별 필터
-  { id: 'male', label: '남', type: 'gender' },
-  { id: 'female', label: '여', type: 'gender' },
+  { id: 'male', label: '남성', type: 'gender' },
+  { id: 'female', label: '여성', type: 'gender' },
 
-  // 계절 필터
   { id: 'spring', label: '봄', type: 'season' },
   { id: 'summer', label: '여름', type: 'season' },
   { id: 'fall', label: '가을', type: 'season' },
   { id: 'winter', label: '겨울', type: 'season' },
 
-  // TPO 필터
   { id: 'daily', label: '데일리', type: 'tpo' },
   { id: 'campus', label: '캠퍼스', type: 'tpo' },
   { id: 'date', label: '데이트', type: 'tpo' },
   { id: 'work', label: '출근', type: 'tpo' },
   { id: 'travel', label: '여행', type: 'tpo' },
   { id: 'outing', label: '가벼운 외출', type: 'tpo' },
-  { id: 'workout', label: '운동', type: 'tpo' }
-];
+  { id: 'workout', label: '운동', type: 'tpo' },
+] as const;
+
+type FilterOptionRaw = typeof FILTER_OPTIONS[number];
+
+const FILTER_OPTIONS_TYPED: FilterOption[] = FILTER_OPTIONS.map(opt => ({
+  id: opt.id,
+  label: opt.label,
+  type: opt.type as 'style' | 'season' | 'tpo' | 'gender'
+}));
 
 
 function shuffleArray<T>(arr: T[]): T[] {
@@ -88,7 +93,6 @@ export default function Collections() {
   };
   const [searchQuery, setSearchQuery] = useState(""); // ✅ 검색어 상태
 
-  const styleFilter = searchParams.get("style") ?? "";
 
   const [myId, setMyId] = useState<number | null>(null);
 
@@ -97,29 +101,44 @@ export default function Collections() {
   const selectedStyles = searchParams.getAll("style");
   const selectedSeason = searchParams.getAll("season");
   const selectedTpo = searchParams.getAll("tpo");
+  const selectedGender = searchParams.get("gender") || "";
 
   
 
   // 선택된 태그 ID 목록
-    const selectedItems= [
-      ...selectedStyles.map((id) => ({ id, type: 'style' })),
-      ...selectedSeason.map((id) => ({ id, type: 'season' })),
-      ...selectedTpo.map((id) => ({ id, type: 'tpo' })),
-      ...(searchParams.get('gender') ? [{ id: searchParams.get('gender')!, type: 'gender' }] : []),
-    ];
+     const selectedItems: { id: string; type: 'style' | 'season' | 'tpo' | 'gender' }[] = [
+    ...selectedStyles.map((id) => ({ id, type: 'style' as const })),
+    ...selectedSeason.map((id) => ({ id, type: 'season' as const })),
+    ...selectedTpo.map((id) => ({ id, type: 'tpo' as const })),
+    ...(selectedGender ? [{ id: selectedGender, type: 'gender' as const }] : []),
+  ];
+    
+    const sortedFilterListRef = useRef<FilterOption[]>([]);
 
-  const selectedFilterList: FilterOption[] = selectedItems
-  .map(({ id, type }) =>
-    FILTER_OPTIONS.find((f) => f.id === id && f.type === type)
-  )
-  .filter((f): f is FilterOption => f !== undefined);
+  const selectedFilterListTyped: FilterOption[] = selectedItems.flatMap(({ id, type }) => {
+  const found = FILTER_OPTIONS_TYPED.find(f => f.id === id && f.type === type);
+  return found ? [found] : [];
+});
 
-  const selectedKeys = new Set(selectedFilterList.map(f => `${f.type}:${f.id}`));
-const unselected = FILTER_OPTIONS.filter(
-  (f) => !selectedKeys.has(`${f.type}:${f.id}`)
-);
+// 이걸 사용
+if (sortedFilterListRef.current.length === 0) {
+    const selectedKeys = new Set(selectedFilterListTyped.map((f) => `${f.type}:${f.id}`));
+    const unselected = FILTER_OPTIONS.filter(
+      (f) => !selectedKeys.has(`${f.type}:${f.id}`)
+    );
+    sortedFilterListRef.current = [...selectedFilterListTyped, ...shuffleArray(unselected)];
+  } else {
+    const selectedKeys = new Set(selectedFilterListTyped.map((f) => `${f.type}:${f.id}`));
+    const alreadySorted = sortedFilterListRef.current;
+    const selectedInOrder = selectedFilterListTyped;
+    const rest = alreadySorted.filter(
+      (f) => !selectedKeys.has(`${f.type}:${f.id}`)
+    );
+    sortedFilterListRef.current = [...selectedInOrder, ...rest];
+  }
 
-const sortedFilterList = [...selectedFilterList, ...shuffleArray(unselected)].slice(0, 13);
+  const sortedFilterList = sortedFilterListRef.current;
+
 
 
   const [activeFilters, setActiveFilters] = useState({
@@ -132,31 +151,45 @@ const sortedFilterList = [...selectedFilterList, ...shuffleArray(unselected)].sl
 
 
   const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-  
-    const filters = parseSearchKeyword(searchQuery);
-    const params = new URLSearchParams();
-  
-    filters.style?.forEach((s) => params.append("style", s));
-    if (filters.gender) params.set("gender", filters.gender);
-    filters.season?.forEach((s) => params.append("season", s));
-    if (filters.tpo) params.set("tpo", filters.tpo);
-  
-    // ✅ 검색 로그 저장
-    await fetch("https://looksy.p-e.kr/api/searchlog", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("token") ?? ""}`,
-      },
-      body: JSON.stringify({
-        query: searchQuery,
-        filters: params.toString(),
-      }),
-    });
-  
-    navigate(`/collections?${params.toString()}`);
-  };
+  if (!searchQuery.trim()) return;
+
+  const filters = parseSearchKeyword(searchQuery);
+  const params = new URLSearchParams();
+
+  filters.style?.forEach((s) => params.append("style", s));
+  filters.season?.forEach((s) => params.append("season", s));
+  if (filters.gender) params.set("gender", filters.gender);
+  if (filters.tpo) {
+    const tpoArray = Array.isArray(filters.tpo) ? filters.tpo : [filters.tpo];
+    tpoArray.forEach((s) => params.append("tpo", s));
+  }
+
+  if (!params.toString()) {
+    alert("적절한 태그를 포함한 검색어를 입력해주세요.");
+    return;
+  }
+
+  // ✅ 먼저 검색어를 초기화한 후
+  setSearchQuery("");
+
+  // ✅ 필터 적용
+  setSearchParams(params);
+
+  // ✅ 로그 기록은 나중에
+  await fetch("https://looksy.p-e.kr/api/searchlog", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${localStorage.getItem("token") ?? ""}`,
+    },
+    body: JSON.stringify({
+      query: searchQuery,
+      filters: params.toString(),
+    }),
+  });
+};
+
+
   
   
 
@@ -231,19 +264,23 @@ const sortedFilterList = [...selectedFilterList, ...shuffleArray(unselected)].sl
 
 
   
-  useEffect(() => {
-    const fetchFilteredOutfits = async () => {
-      try {
-        const res = await fetch(`https://looksy.p-e.kr/api/outfits?${searchParams.toString()}`);
-        const data = await res.json();
-        setOutfits(data);
-      } catch (err) {
-        console.error('필터 적용 실패:', err);
-      }
-    };
-  
-    fetchFilteredOutfits(); // searchParams가 바뀔 때마다 실행
-  }, [searchParams]);
+    useEffect(() => {
+      const fetchFilteredOutfits = async () => {
+        try {
+          const url = searchParams.toString()
+            ? `https://looksy.p-e.kr/api/outfits?${searchParams.toString()}`
+            : `https://looksy.p-e.kr/api/outfits`; // ✅ 빈 경우 기본 API 호출
+
+          const res = await fetch(url);
+          const data = await res.json();
+          setOutfits(data);
+        } catch (err) {
+          console.error('필터 적용 실패:', err);
+        }
+      };
+
+      fetchFilteredOutfits(); // ✅ 항상 호출되도록 수정
+    }, [searchParams]);
 
 
   // 기존의 홈 버튼 클릭 핸들러 수정
@@ -420,7 +457,7 @@ const sortedFilterList = [...selectedFilterList, ...shuffleArray(unselected)].sl
             <SlidersHorizontal className="w-6 h-6 text-gray-600" />
           </Button>
             
-            {sortedFilterList.map((filter) => {
+            {sortedFilterList.slice(0, 13).map((filter) => {
               const isActive =
                 selectedStyles.includes(filter.id) && filter.type === "style" ||
                 selectedSeason.includes(filter.id) && filter.type === "season" ||
@@ -439,7 +476,7 @@ const sortedFilterList = [...selectedFilterList, ...shuffleArray(unselected)].sl
                   >
                     <div className="bg-white rounded-full p-0.5 w-full h-full flex items-center justify-center">
                       <div className="w-full h-full rounded-full bg-gray-100 flex items-center justify-center text-xs">
-                        {filter.label.slice(0, 5)}
+                        {filter.label.slice(0, 6)}
                       </div>
                     </div>
                   </button>
@@ -466,54 +503,61 @@ const sortedFilterList = [...selectedFilterList, ...shuffleArray(unselected)].sl
 
 
       {/* 아웃핏 그리드 */}
-      <div className="max-w-7xl mx-auto p-4">
-      {outfits.length === 0 ? (
-          <div className="w-full flex flex-col items-center justify-center py-16 text-center text-gray-400">
-            <svg
-              className="h-16 w-16 mb-4 text-gray-300"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth={1.2}
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M3 7l9 6 9-6M4 19h16M4 15h16"
-              />
-            </svg>
-            <h2 className="text-lg font-semibold text-gray-500 mb-2">게시물이 없습니다</h2>
-          </div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-            {outfits.map((outfit) => (
-              <div
-                key={outfit.id}
-                className="relative group cursor-pointer"
-                onClick={() => navigate(`/outfit/${outfit.id}`)}
-              >
-                <div className="aspect-square overflow-hidden rounded-lg">
-                  <img
-                    src={outfit.imageUrl}
-                    alt={outfit.title}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
-                <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg" />
-                <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent text-white rounded-b-lg">
-                  <h3 className="font-semibold text-sm">{outfit.title}</h3>
-                  <div className="flex items-center text-xs text-gray-200">
-                    <span>❤️ {typeof outfit.likes === 'number' ? outfit.likes.toLocaleString() : 0}</span>
-                    <span className="mx-1">•</span>
-                    <span>{outfit.items} items</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          
-        )}
+      <div className="max-w-7xl mx-auto p-4 ">
+  <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 min-h-[300px]">
+    {outfits.length === 0 ? (
+      <div className="col-span-full flex flex-col items-center justify-center py-16 text-center text-gray-400">
+        <svg
+          className="h-16 w-16 mb-4 text-gray-300"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth={1.2}
+        >
+          <path
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            d="M3 7l9 6 9-6M4 19h16M4 15h16"
+          />
+        </svg>
+        <h2 className="text-lg font-semibold text-gray-500 mb-2">
+          게시물이 없습니다
+        </h2>
       </div>
+    ) : (
+      outfits.map((outfit) => (
+        <div
+          key={outfit.id}
+          className="relative group cursor-pointer"
+          onClick={() => navigate(`/outfit/${outfit.id}`)}
+        >
+          <div className="aspect-square overflow-hidden rounded-lg">
+            <img
+              src={outfit.imageUrl}
+              alt={outfit.title}
+              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+            />
+          </div>
+          <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg" />
+          <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent text-white rounded-b-lg">
+            <h3 className="font-semibold text-sm">{outfit.title}</h3>
+            <div className="flex items-center text-xs text-gray-200">
+              <span>
+                ❤️{' '}
+                {typeof outfit.likes === 'number'
+                  ? outfit.likes.toLocaleString()
+                  : 0}
+              </span>
+              <span className="mx-1">•</span>
+              <span>{outfit.items} items</span>
+            </div>
+          </div>
+        </div>
+      ))
+    )}
+  </div>
+</div>
+
       </>
       )}
     </div>

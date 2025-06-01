@@ -19,3 +19,6 @@ margin-left: unset !important;
     flex-direction: row;
     gap: 20px;
 }
+html {
+  overflow-y: scroll;
+}
