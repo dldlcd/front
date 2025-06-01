@@ -189,59 +189,6 @@ export default function DesignApproachSection(): React.JSX.Element {
   };
   
 
-  const xivCollectionsProducts = [
-    {
-      id: 1017,
-      image: "/image-17.png", // Using placeholder paths as per original
-      type: "V-Neck T-Shirt",
-      name: "Embroidered Seersucker Shirt",
-    },
-    {
-      id: 1018,
-      image: "/image-9.png",
-      type: "Cotton T Shirt",
-      name: "Basic Slim Fit T-shirt",
-      variants: 5,
-    },
-    {
-      id: 1019,
-      image: "/image-10.png",
-      type: "Henley T-Shirt",
-      name: "Blurred Print T-Shirt",
-    },
-    {
-      id: 1020,
-      image: "/image-11.png",
-      type: "Crewneck T-Shirt",
-      name: "Full Sleeve Zipper",
-    },
-    {
-      id: 1021,
-      image: "/image-30.png",
-      type: "Crewneck T-Shirt",
-      name: "Full Sleeve Zipper",
-    },
-    {
-      id: 1022,
-      image: "/image-32.png",
-      type: "Crewneck T-Shirt",
-      name: "Full Sleeve Zipper",
-    },
-    {
-      id: 1023,
-      image: "/image-33.png",
-      type: "Crewneck T-Shirt",
-      name: "Full Sleeve Zipper",
-    },
-    {
-      id: 1024,
-      image: "/image-34.png",
-      type: "Crewneck T-Shirt",
-      name: "Full Sleeve Zipper",
-    },
-  ];
-  
-
   return (
     <section className={'w-full max-w-[1321px] mx-auto py-12 ${className || ""}'}>
       <div className="flex justify-between items-start mb-8">
@@ -358,7 +305,7 @@ export default function DesignApproachSection(): React.JSX.Element {
           <div className="relative">
             <img
               src={outfit.imageUrl}
-              alt={outfit.imageUrl}
+              
               className="w-full h-[313px] object-cover"
             />
             
@@ -369,6 +316,16 @@ export default function DesignApproachSection(): React.JSX.Element {
             </div>
             <div className="font-medium text-black text-sm mt-1">
               {outfit.description}
+              <div>
+                    {[outfit.style, outfit.situation, outfit.season].filter(Boolean).map((tag, idx, arr) => (
+                      <span key={tag} className="text-blue-500 text-sm">
+                        #{tag}{idx < arr.length - 1 && ' '}
+                      </span>
+                    ))}
+                  </div>
+                  <div className="font-medium text-[#000000a8] text-xs truncate">
+                    {outfit.type}
+                  </div>
             </div>
           </div>
         </CardContent>
