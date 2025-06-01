@@ -360,11 +360,11 @@ useEffect(() => {
             {[outfit.style, outfit.situation, outfit.season]
               .filter(Boolean)
               .map((tag) => {
-                const lowerTag = tag.toLowerCase();
-                console.log("태그 확인:", lowerTag, "->", tagMap[lowerTag]);
+                const normalized = tag.trim().toLowerCase();  // ✅ 공백 제거 + 소문자 통일
+                const display = tagMap[normalized] || tag;
                 return (
                   <span key={tag} className="text-blue-500 text-sm">
-                    #{tagMap[lowerTag] || tag}
+                    #{display}
                   </span>
                 );
               })}
