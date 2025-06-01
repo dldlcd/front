@@ -42,7 +42,7 @@ export default function DesignApproachSection(): React.JSX.Element {
 
   const [outfits, setOutfits] = useState<Outfit[]>([]);
   const navigate = useNavigate();
-  const [outfit, setOutfit] = useState<Outfit | null>(null);
+  const [recommended, setRecommended] = useState<Outfit[]>([]);
 
   const [page, setPage] = useState(0);
   const itemsPerPage = 4
@@ -93,8 +93,28 @@ export default function DesignApproachSection(): React.JSX.Element {
     }
   };
 
+  
+
+    const fetchRecommendedOutfits = async () => {
+    const tagRes = await fetch("https://looksy.p-e.kr/api/searchlog/recommend", {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+    });
+
+    const { styles, tpo } = await tagRes.json();
+    const params = new URLSearchParams();
+    styles.forEach((s: string) => params.append("style", s));
+    if (tpo) params.set("tpo", tpo);
+
+    const outfitRes = await fetch(`https://looksy.p-e.kr/api/outfits?${params.toString()}`);
+    const outfitData = await outfitRes.json();
+    setRecommended(outfitData); // IV COLLECTIONS에 뿌릴 추천 리스트
+  };
+
   useEffect(() => {
     fetchOutfits();
+    fetchRecommendedOutfits();
   }, []);
 
 
@@ -283,37 +303,26 @@ export default function DesignApproachSection(): React.JSX.Element {
   </div>
 
   <div className="grid grid-cols-4 gap-6 mt-6">
-    {xivCollectionsProducts.map((product) => (
+    {recommended.map((outfit) => (
       <Card
-        key={product.id}
+        key={outfit.id}
         className="border border-solid border-[#d6d6d6] rounded-none"
       >
         <CardContent className="p-0 relative">
           <div className="relative">
             <img
-              src={product.image}
-              alt={product.name}
+              src={outfit.imageUrl}
+              alt={outfit.imageUrl}
               className="w-full h-[313px] object-cover"
             />
-            <Button
-              variant="ghost"
-              size="icon"
-              className="absolute bottom-2 left-1/2 -translate-x-1/2 w-[34px] h-[34px] bg-[#dbdbdb70] opacity-[0.66] rounded-none"
-            >
-              <Heart className="w-[13px] h-[13px]" />
-            </Button>
+            
           </div>
           <div className="p-3">
             <div className="font-medium text-[#000000a8] text-xs">
-              {product.type}
-              {product.variants && (
-                <span className="ml-2 font-light text-[10px]">
-                  +{product.variants}
-                </span>
-              )}
+              {outfit.title}
             </div>
             <div className="font-medium text-black text-sm mt-1">
-              {product.name}
+              {outfit.description}
             </div>
           </div>
         </CardContent>
