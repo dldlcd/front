@@ -341,7 +341,7 @@ if (sortedFilterListRef.current.length === 0) {
             onApply={(filters) => {
               const newParams = new URLSearchParams();
               filters.style.forEach((v) => newParams.append("style", v));
-              filters.season.forEach((v) => newParams.append("season", v));
+              if (filters.season) newParams.set("season", filters.season);
               if (filters.gender) newParams.set("gender", filters.gender);
               filters.tpo.forEach((v) => newParams.append("tpo", v));
               setSearchParams(newParams);
@@ -350,7 +350,7 @@ if (sortedFilterListRef.current.length === 0) {
             onClose={() => setShowFilter(false)}
             selectedStyles={selectedStyles}
             selectedGender={searchParams.get("gender") || ""}
-            selectedSeason={selectedSeason}
+            selectedSeason={searchParams.get("season") || ""}
             selectedTpo={selectedTpo}
           />
     </div>

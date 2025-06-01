@@ -144,6 +144,7 @@ export default function DesignApproachSection(): React.JSX.Element {
     params.append("tpo", tags.tpo);
   }
 
+
   try {
     const outfitRes = await fetch(`https://looksy.p-e.kr/api/outfits?${params.toString()}`);
     if (!outfitRes.ok) throw new Error("추천 outfit 불러오기 실패");
