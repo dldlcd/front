@@ -305,6 +305,7 @@ export default function DesignApproachSection(): React.JSX.Element {
           <div className="relative">
             <img
               src={outfit.imageUrl}
+              onClick={() => navigate(`/outfit/${outfit.id}`)}
               
               className="w-full h-[313px] object-cover"
             />
