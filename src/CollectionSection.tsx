@@ -53,7 +53,10 @@ export default function CollectionSection({ className }: CollectionSectionProps)
         console.error("추천 데이터 불러오는 중 오류 발생:", err);
         // 실패 시 기본 이미지 유지
       });
+      
   }, []);
+
+  
 
   return (
     <section className={`w-full max-w-[1600px] mx-auto py-8 ${className || ""}`}>
@@ -107,5 +110,12 @@ export default function CollectionSection({ className }: CollectionSectionProps)
         </div>
       )}
     </section>
+
+    
+
+
+    
+    
+    
   );
 }

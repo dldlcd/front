@@ -5,7 +5,6 @@ import { Routes, Route } from "react-router-dom";
 import Home from "./Home";
 import Collections from "./Collections";
 import CollectionDetail from "./CollectionDetail";
-import Cart from "./Cart";
 import SignIn from "./SignIn";
 import SignUp from "./SignUp";
 import AddOutfit from "./addoutfit";
@@ -23,7 +22,7 @@ const App = () => {
       <Route path="/" element={<Home />} />
       <Route path="/collections" element={<Collections />} />
       <Route path="/collection/:id" element={<CollectionDetail />} />
-      <Route path="/cart" element={<Cart />} />
+      
       <Route path="/signin" element={<SignIn />} />
       <Route path="/signup" element={<SignUp />} />
       <Route path="/add" element={<AddOutfit />} />

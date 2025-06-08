@@ -5,6 +5,7 @@ import {
   PlusSquare, Compass
 } from "lucide-react";
 import CollectionSection from "./CollectionSection";
+import WeatherSection from "./WeatherSection";
 import DesignApproachSection from "./DesignApproachSection";
 import FooterSection from "./FooterSection";
 import { Button } from "@/components/ui/button";
@@ -187,6 +188,7 @@ export default function Home() {
             <h2 className="text-3xl font-bold mb-4">My COLLECTION</h2>
             <CollectionSection />
           </section>
+
         </div>
       </main>
     </div>
