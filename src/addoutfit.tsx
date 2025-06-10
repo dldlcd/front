@@ -24,6 +24,7 @@ export default function AddOutfit() {
     formData.append("season", season);
     formData.append("situation", situation);
     formData.append("style", style);
+    formData.append("gender", gender);
 
     const now = new Date().toISOString().slice(0, 19); // "YYYY-MM-DDTHH:mm:ss"
 formData.append("upload_time", now);

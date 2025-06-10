@@ -65,7 +65,7 @@ const getWeatherTags = (_weather: string, _temp: number) => {
     const token = localStorage.getItem("token");
   
     try {
-      const res = await fetch("https://looksy.p-e.kr/api/outfits/this-week", {
+      const res = await fetch("https://looksy.p-e.kr/api/outfits/this-month", {
         headers: {
           ...(token && { Authorization: `Bearer ${token}` }), // ✅ 토큰 있으면 Authorization 추가
         },
@@ -370,28 +370,6 @@ const fetchWeatherAndOutfits = async () => {
   </Button>
 </div>
 
-{/* ☀️ 오늘의 스타일 제안 */}
-{weatherOutfits.length > 0 && (
-  <section className="py-10">
-  <h2 className="text-3xl font-bold mb-3">☀️ 오늘의 스타일 제안</h2>
-  <p className="text-gray-500 mb-6">오늘 날씨에 어울리는 코디를 추천해드려요!</p>
-  <div className="grid grid-cols-4 gap-6">
-    {(weatherOutfits.length > 0 ? weatherOutfits : recommended.slice(0, 4)).map((outfit) => (
-      <Card key={outfit.id} className="border border-solid border-[#d6d6d6] rounded-none">
-        <CardContent className="p-0 relative">
-          <img src={outfit.imageUrl} className="w-full h-[313px] object-cover" />
-          <div className="p-3">
-            <p className="font-medium text-sm text-gray-800 truncate">{outfit.description}</p>
-            <p className="text-blue-500 text-sm">
-              #{outfit.style} #{outfit.situation} #{outfit.season}
-            </p>
-          </div>
-        </CardContent>
-      </Card>
-    ))}
-  </div>
-</section>
-)}
 
 {/* IV COLLECTIONS Section */}
 <div className="mb-8">
@@ -414,16 +392,11 @@ const fetchWeatherAndOutfits = async () => {
           <div className="relative">
             <img
               src={outfit.imageUrl}
-              className="w-full h-[313px] object-cover"
+              className="w-full h-[300px] object-cover"
             />
           </div>
           <div className="p-3">
-            <div className="font-medium text-[#000000a8] text-xs">
-              {outfit.title}
-            </div>
-            <div className="font-medium text-black text-sm mt-1">
-              {outfit.description}
-              <div>
+            <div>
                 {[outfit.style, outfit.situation, outfit.season]
                   .filter(Boolean)
                   .map((tag, idx, arr) => (
@@ -432,6 +405,15 @@ const fetchWeatherAndOutfits = async () => {
                       {idx < arr.length - 1 && ' '}
                     </span>
                   ))}
+              </div>
+            
+            <div className="font-medium text-[#000000a8] text-xs mt-3">
+              {outfit.title}
+            </div>
+            <div className="border-t border-gray-200 my-2 " />
+            <div className="font-medium text-black text-sm ">
+              <div className = " mt-1 truncate text-ellipsis overflow-hidden whitespace-nowrap">
+              {outfit.description}
               </div>
               <div className="font-medium text-[#000000a8] text-xs truncate">
                 {outfit.type}

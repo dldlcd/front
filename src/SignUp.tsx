@@ -208,7 +208,7 @@ export default function SignUp() {
         <div className="w-full max-w-[1300px] bg-white shadow-2xl rounded-2xl p-10 flex flex-col md:flex-row gap-12">
           {/* 왼쪽: 회원가입 폼 */}
           <div className="w-full max-w-lg">
-            <h1 className="text-3xl font-bold mb-2">CHECKOUT</h1>
+            <h1 className="text-3xl font-bold mb-10 mt-5">CHECKOUT</h1>
             <div className="flex gap-6 text-sm mb-6">
               <span className="font-semibold">INFORMATION</span>
               <span className="text-gray-400">SHIPPING</span>
@@ -220,17 +220,14 @@ export default function SignUp() {
               <Input placeholder="ID (Email)" value={email} onChange={(e) => setEmail(e.target.value)} />
               <Input placeholder="Password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
 
-              <p className="text-sm font-semibold pt-6">SHIPPING ADDRESS</p>
+              <p className="text-sm font-semibold pt-6">NAME</p>
               <div className="flex gap-4">
                 <Input placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
                 <Input placeholder="Last Name" value={lastName} onChange={(e) => setLastName(e.target.value)} />
               </div>
-              <Input placeholder="Country" value={country} onChange={(e) => setCountry(e.target.value)} />
-              <Input placeholder="State/Region" value={state} onChange={(e) => setState(e.target.value)} />
-              <Input placeholder="Address" value={address} onChange={(e) => setAddress(e.target.value)} />
+              
               <div className="flex gap-4">
-                <Input placeholder="Inch" value={inch} onChange={(e) => setInch(e.target.value)} />
-                <Input placeholder="Pound" value={pound} onChange={(e) => setPound(e.target.value)} />
+                
               </div>
 
               <Button onClick={handleSubmit} className="w-full bg-black text-white hover:bg-gray-800 mt-4">

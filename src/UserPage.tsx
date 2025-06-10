@@ -166,7 +166,7 @@ export default function UserPage() {
 
           <Button
             variant="ghost"
-            onClick={() => navigate("/search")}
+            onClick={() => navigate("/collections")}
             className="flex-col h-auto p-2 min-w-[60px] text-gray-700 hover:text-black"
           >
             <Search className="h-5 w-5" />

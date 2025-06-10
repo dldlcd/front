@@ -20,6 +20,7 @@ interface Outfit {
   userId: number;
   userNickname: string;
   style: string;
+  description
 }
 
 interface FilterOption {
@@ -532,7 +533,8 @@ if (sortedFilterListRef.current.length === 0) {
           <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition-all duration-300 rounded-lg" />
           <div className="absolute bottom-0 left-0 right-0 p-3 bg-gradient-to-t from-black to-transparent text-white rounded-b-lg">
             <h3 className="font-semibold text-sm">{outfit.title}</h3>
-            <div className="flex items-center text-xs text-gray-200">
+            <div className="border-t border-black my-2 " />
+            <div className="flex items-center text-xs text-gray-200 whitespace-nowrap">
               <span>
                 ❤️{' '}
                 {typeof outfit.likes === 'number'
@@ -540,7 +542,8 @@ if (sortedFilterListRef.current.length === 0) {
                   : 0}
               </span>
               <span className="mx-1">•</span>
-              <span>{outfit.items} items</span>
+
+              <span className = " truncate text-ellipsis overflow-hidden whitespace-nowrap line-clamp-10">{outfit.description} </span>
             </div>
           </div>
         </div>

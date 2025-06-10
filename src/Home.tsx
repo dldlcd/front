@@ -5,7 +5,6 @@ import {
   PlusSquare, Compass
 } from "lucide-react";
 import CollectionSection from "./CollectionSection";
-import WeatherSection from "./WeatherSection";
 import DesignApproachSection from "./DesignApproachSection";
 import FooterSection from "./FooterSection";
 import { Button } from "@/components/ui/button";
