@@ -391,6 +391,7 @@ const fetchWeatherAndOutfits = async () => {
         <CardContent className="p-0 relative">
           <div className="relative">
             <img
+              onClick={() => navigate(`/outfit/${outfit.id}`)}
               src={outfit.imageUrl}
               className="w-full h-[300px] object-cover"
             />
